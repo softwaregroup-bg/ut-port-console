@@ -13,13 +13,14 @@
             host: '127.0.0.1',
             port: 30001
         };
+        this.socket = null;
+        this.httpServer = null;
     }
 
     util.inherits(Console, Port);
 
     Console.prototype.init = function ConsoleInit() {
         Port.prototype.init.call(this);
-        this.reset();
     };
 
     Console.prototype.start = function ConsoleStart() {
@@ -69,10 +70,7 @@
         Port.prototype.stop.call(this);
         this.socket.end('Console socket closed');
         this.httpServer.close();
-        this.reset();
-    };
-
-    Console.prototype.reset = function ConsoleReset() {
+        // cleanup just in case
         this.socket = null;
         this.httpServer = null;
     };
