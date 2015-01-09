@@ -1199,6 +1199,7 @@
         var i, len;
 
         function formatValue(val, prefix, expand) {
+            return JSON.stringify(val);
             // Check the type of the data value to decide whether quotation marks
             // or expansion are required
             var formattedValue;
@@ -4558,11 +4559,11 @@
 '           }',
 '',
 '           div#log *.ERROR, label#label_ERROR {',
-'               color: red;',
+'               color: crimson;',
 '           }',
 '',
 '           div#log *.FATAL, label#label_FATAL {',
-'               color: #660066;',
+'               color: red;',
 '           }',
 '',
 '           div.TRACE#log *.TRACE,',
@@ -4587,6 +4588,8 @@
 '           div#log table tr.dark { background: #FAFAFA}',
 '           pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; }',
 '           .string { color: green; }',
+'           div#log { overflow-x: hidden; overflow-y: auto }',
+'           div.details { overflow: hidden; display: block; border: none; white-space: nowrap; }',
 '           .number { color: darkorange; }',
 '           .boolean { color: blue; }',
 '           .null { color: magenta; }',
@@ -5868,17 +5871,37 @@ function colorizeJson(json) {
 };
 
 window.onload = function() {
-    var socket = io.connect(location.host);
+    var socket = io.connect(location.host + '/console');
     socket.on('logMessage', function(data) {
-        data = JSON.parse(data).params;
+        data = data.params ? data.params : data;
         try {data.message = JSON.parse(data.message)} catch (e) {/* don't handle */}
-        log[data.level](JSON.stringify(data));
+        log[data.level ? data.level : 'error'](data);
     });
 
-    //log4javascript.Level.TAG=new log4javascript.Level(70000,"TAG");
-    //log4javascript.tag = function(){
-    //    this.log(this.Level.TAG,arguments);
-    //}
+    var LEVELS = [];
+    LEVELS[10] = 'trace';
+    LEVELS[20] = 'debug';
+    LEVELS[30] = 'info';
+    LEVELS[40] = 'warn';
+    LEVELS[50] = 'error';
+    LEVELS[60] = 'fatal';
+
+    socket.on('logJSON', function(data) {
+        if (data.level === 10 || data.level === 20 || data.level === 30 || data.level === 40 || data.level === 50 || data.level === 60) {
+            data.level = LEVELS[data.level];
+        }
+        log[data.level ? data.level : 'error'](data);
+    });
+
+    socket.on('connect', function() {
+        console.log('connected');
+        socket.emit('test');
+    });
+
+    /*log4javascript.Level.TAG = new log4javascript.Level(70000, "TAG");
+    log4javascript.tag = function() {
+        this.log(this.Level.TAG, arguments);
+    };*/
 
     var log = log4javascript.getLogger('main');
     log.setLevel(log4javascript.Level.TRACE);
@@ -5893,22 +5916,40 @@ window.onload = function() {
         consoleWin = appender.getConsoleWindow();
         consoleWin.colorizeJson = colorizeJson;
         consoleWin.LogEntryElementContainer.prototype.setContent = function(content, wrappedContent) {
-            content = JSON.parse(content);
-            var message = JSON.parse(content.message.replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t'));
-            message.timestamp = (new Date(content.timestamp)).toLocaleString().replace(', ', '\n');debugger;
-            if (typeof message.message != 'string') {
+            if (typeof content !== 'object') {
+                content = JSON.parse(content);
+            }
+            //var message = JSON.parse(content.message.replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t'));
+            var time = content.timestamp ? new Date(content.timestamp) : new Date();
+            content.time = '' + time.getFullYear() +
+                '-' + ('00' + (time.getMonth() + 1)).substr(-2) +
+                '-' + ('00' + time.getDay()).substr(-2) +
+                ' ' + ('00' + time.getHours()).substr(-2) +
+                ':' + ('00' + time.getMinutes()).substr(-2) +
+                ':' + ('00' + time.getSeconds()).substr(-2);
+            content.sender = (content.message && content.message.name) ? content.message.name : null;
+            content.context = (content.message && content.message.context) ? content.message.context : null;
+            content.opcode = (content.message && content.message.message && content.message.message._opcode) ? content.message.message._opcode : (content.message && (typeof content.message.message === 'string')) ? content.message.message : '';
+
+            if (typeof content.message != 'string') {
                 try {
-                    message.message =   '<span onclick="this.innerHTML = colorizeJson(this.innerText); this.onclick = null;">' +
-                                            JSON.stringify(message.message, null, 2) +
+                    content.message =   '<span onclick="if (this.parentElement.className !==\'details\') {this.parentElement.className=\'details\'} else {this.parentElement.className=\'\'}">' +
+                                            JSON.stringify(content.message, null, 2) +
                                         '</span>';
                 } catch (e) {/* don't handle */}
             }
-            this.mainDiv.appendChild(document.createElement('td')).innerHTML = message.timestamp;
+            var element;
+            element = document.createElement('td');
+            element.style.whiteSpace = 'nowrap';
+            this.mainDiv.appendChild(element).innerHTML = content.time;
             this.mainDiv.appendChild(document.createElement('td')).innerHTML = content.level;
-            this.mainDiv.appendChild(document.createElement('td'));
-            this.mainDiv.appendChild(document.createElement('td'));
-            this.mainDiv.appendChild(document.createElement('td')).innerHTML = message.name;
-            this.mainDiv.appendChild(document.createElement('td')).innerHTML = message.message;
+            this.mainDiv.appendChild(document.createElement('td')).innerHTML = content.sender || '';
+            this.mainDiv.appendChild(document.createElement('td')).innerHTML = content.context || '';
+            this.mainDiv.appendChild(document.createElement('td')).innerHTML = content.opcode;
+            element = this.mainDiv.appendChild(document.createElement('td'));
+            element = element.appendChild(document.createElement('div'));
+            element.innerHTML = content.message;
+            element.className = 'details';
         };
         consoleWin.LogEntryMainElementContainer = function(logEntry, containerDomNode) {
             this.logEntry = logEntry;

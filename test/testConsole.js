@@ -3,7 +3,7 @@ require('repl').start({useGlobal: true});
 var wire = require('wire');
 
 m = wire({
-    host: '127.0.0.1',
+    host: '0.0.0.0',
     port: 30001,
     winston : {
         create : {
@@ -43,3 +43,4 @@ m = wire({
 .otherwise(function(error) {
     err = error;
 });
+

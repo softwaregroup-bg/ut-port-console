@@ -56,13 +56,23 @@
                     data += chunk;
                 });
                 req.on('end', function() {
-                    self.socket.emit('logMessage', data);
+                    try {
+                        data = JSON.parse(data);
+                    } catch (e) {
+                    }
+                    self.console.emit('logMessage', data);
                     res.end();
                 });
             }
         });
         this.httpServer.listen(this.config.port, this.config.host);
-        this.socket = io.listen(this.httpServer);
+        this.socket = io(this.httpServer);
+        this.console = this.socket.of('/console');
+        this.socket.of('/log').on('connection', function(socket) {
+            socket.on('log', function(msg) {
+                self.console.emit('logJSON', msg);
+            })
+        });
         console.log('go to: http://' + this.config.host + ':' + this.config.port + ' to access the debug console');
     };
 
