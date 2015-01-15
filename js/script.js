@@ -5893,9 +5893,15 @@ window.onload = function() {
         log[data.level ? data.level : 'error'](data);
     });
 
+    var pageWrapper = document.getElementById('logger');
     socket.on('connect', function() {
         console.log('connected');
         socket.emit('test');
+        pageWrapper.style.borderTop = 'none';
+    });
+
+    socket.on('disconnect', function() {
+        pageWrapper.style.borderTop = '5px solid red';
     });
 
     /*log4javascript.Level.TAG = new log4javascript.Level(70000, "TAG");

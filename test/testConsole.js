@@ -38,9 +38,8 @@ m = wire({
     }
 }, {require: require})
 .then(function contextLoaded(context) {
-    log = context.winston;
+    log = context.winston.createLog('trace', {name: 'test_name', context: 'test_context'});
 })
 .otherwise(function(error) {
     err = error;
 });
-
