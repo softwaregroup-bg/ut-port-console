@@ -5996,7 +5996,7 @@ window.onload = function() {
             } catch (e) {
                 customClasses = '';
             }
-            customClasses += consoleWin.logEntries.length % 2 ? 'light ' : ' dark ';
+            customClasses += consoleWin.logEntries.length % 2 ? 'light ' : 'dark ';
             this.mainDiv.className = 'logentry nonielogentry' + customClasses + logEntry.level;
             this.setContent(logEntry.formattedMessage);
         };
@@ -6035,7 +6035,7 @@ window.onload = function() {
         // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
         // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-        var switches = $('#switches', consoleWin.document);
+        var switches = jQuery('#switches', consoleWin.document);
         var customToolbars = {};
 
         // CustomToolbar component
@@ -6043,10 +6043,10 @@ window.onload = function() {
             customToolbars[id] = this;
             this.id = id;
             this.options = {};
-            this.element = $('<div id="toolbar_' + id + '" class="toolbar"></div>');
-            this.labelElement = $('<span>' + (id.charAt(0).toUpperCase() + id.slice(1)) + ' :</span>')
-            this.optionsElement = $('<span></span>');
-            this.allElement = $('<input type="checkbox" id="' + this.id + '_ALL" checked="checked" title="Show/hide all messages" /><label for="' + this.id + '_ALL" id="' + this.id + '_label_ALL">all</label>')
+            this.element = jQuery('<div id="toolbar_' + id + '" class="toolbar"></div>');
+            this.labelElement = jQuery('<span>' + (id.charAt(0).toUpperCase() + id.slice(1)) + ' :</span>')
+            this.optionsElement = jQuery('<span></span>');
+            this.allElement = jQuery('<input type="checkbox" id="' + this.id + '_ALL" checked="checked" title="Show/hide all messages" /><label for="' + this.id + '_ALL" id="' + this.id + '_label_ALL">all</label>')
             var self = this;
             this.allElement.click(function() {
                 self.toggleAllOptions();
@@ -6091,7 +6091,7 @@ window.onload = function() {
             if (this.options[id]) {
                 return;
             }
-            this.options[id] = $('<input type="checkbox" id="' + this.id + '_' + id + '" checked="checked" title="Show/hide ' + id + ' messages" /><label for="' + this.id + '_' + id + '" id="label_' + this.id + '_' + id + '">' + id + '</label>');
+            this.options[id] = jQuery('<input type="checkbox" id="' + this.id + '_' + id + '" checked="checked" title="Show/hide ' + id + ' messages" /><label for="' + this.id + '_' + id + '" id="label_' + this.id + '_' + id + '">' + id + '</label>');
             var self = this;
             this.options[id].click(function() {
                 self.applyFilters();
