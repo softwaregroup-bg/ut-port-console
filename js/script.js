@@ -5914,16 +5914,27 @@ window.onload = function() {
     var appender = new log4javascript.InPageAppender('logger', false, false, true, '100%', '100%');
     var layout = new log4javascript.JsonLayout();
     appender.setLayout(layout);
-    /*layout.format = function(){
-        return 'test';
+    /*layout.format = function() {
+        debugger;
     }*/
     var consoleWin = null;
     appender.addEventListener('load', function() {
         consoleWin = appender.getConsoleWindow();
         consoleWin.colorizeJson = colorizeJson;
+        function setSearchMarkers(content) {
+            var regexp = new RegExp('(' + consoleWin.currentSearch.searchTerm + ')', 'gi');
+            var replacement = '<span class=\'searchterm\'>' + consoleWin.currentSearch.searchTerm + '</span>';
+            for (var prop in content) {
+                if (content.hasOwnProperty(prop) && typeof content[prop] == 'string') {
+                    content[prop] = content[prop].replace(regexp, '<span class=\'searchterm\'>$1</span>');
+                }
+            }
+            return content;
+        }
         consoleWin.LogEntryElementContainer.prototype.setContent = function(content, wrappedContent) {
+            var searched = consoleWin.currentSearch && (content !== this.logEntry.formattedMessage);
             if (typeof content !== 'object') {
-                content = JSON.parse(content);
+                content = JSON.parse(this.logEntry.formattedMessage);
             }
             //var message = JSON.parse(content.message.replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t'));
             var time = content.timestamp ? new Date(content.timestamp) : new Date();
@@ -5944,6 +5955,11 @@ window.onload = function() {
                                         '</span>';
                 } catch (e) {/* don't handle */}
             }
+            if (searched) {
+                content = setSearchMarkers(content);
+            }
+            var detailsDiv = this.mainDiv.lastChild && this.mainDiv.lastChild.lastChild;
+            this.mainDiv.innerHTML = '';
             var element;
             element = document.createElement('td');
             element.style.whiteSpace = 'nowrap';
@@ -5953,9 +5969,13 @@ window.onload = function() {
             this.mainDiv.appendChild(document.createElement('td')).innerHTML = content.context || '';
             this.mainDiv.appendChild(document.createElement('td')).innerHTML = content.opcode;
             element = this.mainDiv.appendChild(document.createElement('td'));
-            element = element.appendChild(document.createElement('div'));
+            if (detailsDiv) {
+                element = element.appendChild(detailsDiv);
+            } else {
+                element = element.appendChild(document.createElement('div'));
+                element.className = 'details';
+            }
             element.innerHTML = content.message;
-            element.className = 'details';
         };
         consoleWin.LogEntryMainElementContainer = function(logEntry, containerDomNode) {
             this.logEntry = logEntry;
