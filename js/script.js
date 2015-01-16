@@ -6002,16 +6002,8 @@ window.onload = function() {
         };
         consoleWin.LogEntryMainElementContainer.prototype = new consoleWin.LogEntryElementContainer();
 
-        // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        // @@@@@@@@                 @@@@@@@@
-        // @@@@@@@@ custom toolbars @@@@@@@@
-        // @@@@@@@@                 @@@@@@@@
-        // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
         // @overrides below
-        consoleWin.applyFilters = function applyFilters() {debugger;
+        consoleWin.applyFilters = function applyFilters() {
             for (var i = 0; i < consoleWin.logLevels.length; i++) {
                 if (consoleWin.getCheckBox(consoleWin.logLevels[i]).checked) {
                     consoleWin.removeClass(consoleWin.logMainContainer, consoleWin.logLevels[i]);
@@ -6034,6 +6026,15 @@ window.onload = function() {
             }
         }
         // @overrides above
+
+        // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+        // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+        // @@@@@@@@                 @@@@@@@@
+        // @@@@@@@@ custom toolbars @@@@@@@@
+        // @@@@@@@@                 @@@@@@@@
+        // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+        // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
         var switches = $('#switches', consoleWin.document);
         var customToolbars = {};
 
