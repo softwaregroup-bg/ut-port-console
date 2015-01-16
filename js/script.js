@@ -5923,7 +5923,6 @@ window.onload = function() {
         consoleWin.colorizeJson = colorizeJson;
         function setSearchMarkers(content) {
             var regexp = new RegExp('(' + consoleWin.currentSearch.searchTerm + ')', 'gi');
-            var replacement = '<span class=\'searchterm\'>' + consoleWin.currentSearch.searchTerm + '</span>';
             for (var prop in content) {
                 if (content.hasOwnProperty(prop) && typeof content[prop] == 'string') {
                     content[prop] = content[prop].replace(regexp, '<span class=\'searchterm\'>$1</span>');
