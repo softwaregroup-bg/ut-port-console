@@ -6111,7 +6111,7 @@ window.onload = function() {
             if (this.options[id]) {
                 return;
             }
-            this.options[id] = jQuery('<input type="checkbox" id="' + this.id + '_' + id + '" checked="checked" title="Show/hide ' + id + ' messages" /><label for="' + this.id + '_' + id + '" id="label_' + this.id + '_' + id + '">' + value + '</label>');
+            this.options[id] = jQuery('<input type="checkbox" id="' + this.id + '_' + id + '" checked="checked" title="Show/hide ' + value + ' messages" /><label for="' + this.id + '_' + id + '" id="label_' + this.id + '_' + id + '">' + value + '</label>');
             var self = this;
             this.options[id].click(function() {
                 self.applyFilters();
