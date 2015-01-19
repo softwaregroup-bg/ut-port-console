@@ -5907,6 +5907,7 @@ window.onload = function() {
     var log = log4javascript.getLogger('main');
     log.setLevel(log4javascript.Level.TRACE);
     var appender = new log4javascript.InPageAppender('logger', false, false, true, '100%', '100%');
+    appender.setMaxMessages(256);
     var layout = new log4javascript.JsonLayout();
     appender.setLayout(layout);
     /*layout.format = function() {
@@ -5979,19 +5980,22 @@ window.onload = function() {
             var msg = null;
             var name = null;
             var context = null;
+            var className = null;
             try {
                 msg = JSON.parse(logEntry.formattedMessage).message;
                 if (msg.name) {
-                    customClasses += 'name_' + msg.name + ' ';
-                    jss.set('tr.logentry.' + 'name_' + msg.name, {'display': 'table-row'});
-                    jss.set('div.' + 'name_' + msg.name + '#log *.logentry.' + 'name_' + msg.name, {'display': 'none'});
-                    customToolbars['name'].addOption(msg.name);
+                    className = msg.name.replace(/ /g, '_');
+                    customClasses += 'name_' + className + ' ';
+                    jss.set('tr.logentry.' + 'name_' + className, {'display': 'table-row'});
+                    jss.set('div.' + 'name_' + className + '#log *.logentry.' + 'name_' + className, {'display': 'none'});
+                    customToolbars['name'].addOption(className, msg.name);
                 }
                 if (msg.context) {
-                    customClasses += 'context_' + msg.context + ' ';
-                    jss.set('tr.logentry.' + 'context_' + msg.context, {'display': 'table-row'});
-                    jss.set('div.' + 'context_' + msg.context + '#log *.logentry.' + 'context_' + msg.context, {'display': 'none'});
-                    customToolbars['context'].addOption(msg.context);
+                    className = msg.context.replace(/ /g, '_');
+                    customClasses += 'context_' + className + ' ';
+                    jss.set('tr.logentry.' + 'context_' + className, {'display': 'table-row'});
+                    jss.set('div.' + 'context_' + className + '#log *.logentry.' + 'context_' + className, {'display': 'none'});
+                    customToolbars['context'].addOption(className, msg.context);
                 }
             } catch (e) {
                 customClasses = '';
@@ -6025,6 +6029,21 @@ window.onload = function() {
                 }
             }
         }
+
+        consoleWin.clearLog = function clearLog() {
+            consoleWin.rootGroup.clear();
+            consoleWin.currentGroup = consoleWin.rootGroup;
+            consoleWin.logEntries = [];
+            consoleWin.logItems = [];
+            consoleWin.logEntriesAndSeparators = [];
+            consoleWin.doSearch();
+            console.log('overridden');
+            for (var toolbar in customToolbars) {
+                if (customToolbars.hasOwnProperty(toolbar)) {
+                    customToolbars[toolbar].clearOptions();
+                }
+            }
+        }
         // @overrides above
 
         // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -6055,11 +6074,12 @@ window.onload = function() {
             this.element.append([this.labelElement, this.optionsElement, this.allElement]);
             switches.prepend(this.element);
         }
+
         CustomToolbar.prototype.applyFilters = function() {
             var cssClass = '';
             for (var option in this.options) {
                 if (this.options.hasOwnProperty(option)) {
-                    cssClass = this.id + '_' + this.options[option][1].innerHTML;
+                    cssClass = this.options[option][0].id;
                     this.options[option][0].checked ? consoleWin.removeClass(consoleWin.logMainContainer, cssClass) : consoleWin.addClass(consoleWin.logMainContainer, cssClass);
                 }
             }
@@ -6071,12 +6091,12 @@ window.onload = function() {
             for (var option in this.options) {
                 if (this.options.hasOwnProperty(option)) {
                     this.options[option][0].checked = turnOn;
-                    cssClass = this.id + '_' + this.options[option][1].innerHTML;
+                    cssClass = this.options[option][0].id;
                     turnOn ? consoleWin.removeClass(consoleWin.logMainContainer, cssClass) : consoleWin.addClass(consoleWin.logMainContainer, cssClass);
                 }
             }
         };
-        CustomToolbar.prototype.checkkAllOptions = function() {
+        CustomToolbar.prototype.checkAllOptions = function() {
             for (var option in this.options) {
                 if (this.options.hasOwnProperty(option)) {
                     if (!this.options[option][0].checked) {
@@ -6087,17 +6107,30 @@ window.onload = function() {
             }
             this.allElement[0].checked = true;
         };
-        CustomToolbar.prototype.addOption = function(id) {
+        CustomToolbar.prototype.addOption = function(id, value) {
             if (this.options[id]) {
                 return;
             }
-            this.options[id] = jQuery('<input type="checkbox" id="' + this.id + '_' + id + '" checked="checked" title="Show/hide ' + id + ' messages" /><label for="' + this.id + '_' + id + '" id="label_' + this.id + '_' + id + '">' + id + '</label>');
+            this.options[id] = jQuery('<input type="checkbox" id="' + this.id + '_' + id + '" checked="checked" title="Show/hide ' + id + ' messages" /><label for="' + this.id + '_' + id + '" id="label_' + this.id + '_' + id + '">' + value + '</label>');
             var self = this;
             this.options[id].click(function() {
                 self.applyFilters();
-                self.checkkAllOptions();
+                self.checkAllOptions();
             });
             this.optionsElement.append(this.options[id]);
+        };
+
+        CustomToolbar.prototype.clearOptions = function() {
+            for (var option in this.options) {
+                if (this.options.hasOwnProperty(option)) {
+                    consoleWin.removeClass(consoleWin.logMainContainer, this.options[option][0].id);
+                    this.options[option].click = null;
+                    this.options[option] = null;
+                }
+            }
+            this.options = {};
+            this.optionsElement.html('');
+            this.checkAllOptions();
         };
 
         new CustomToolbar('name');
