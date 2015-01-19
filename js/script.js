@@ -5907,7 +5907,7 @@ window.onload = function() {
     var log = log4javascript.getLogger('main');
     log.setLevel(log4javascript.Level.TRACE);
     var appender = new log4javascript.InPageAppender('logger', false, false, true, '100%', '100%');
-    appender.setMaxMessages(256);
+    appender.setMaxMessages(5000);
     var layout = new log4javascript.JsonLayout();
     appender.setLayout(layout);
     /*layout.format = function() {
@@ -5941,7 +5941,7 @@ window.onload = function() {
                 ':' + ('00' + time.getSeconds()).substr(-2);
             content.sender = (content.message && content.message.name) ? content.message.name : null;
             content.context = (content.message && content.message.context) ? content.message.context : null;
-            content.opcode = (content.message && content.message.message && content.message.message._opcode) ? content.message.message._opcode : (content.message && (typeof content.message.message === 'string')) ? content.message.message : '';
+            content.opcode = (content.message && content.message.$$ && content.message.$$.opcode) ? content.message.$$.opcode : (content.message && content.message.message && content.message.message.$$ && content.message.message.$$.opcode) ? content.message.message.$$.opcode : (content.message && (typeof content.message.message === 'string')) ? content.message.message : '';
 
             if (typeof content.message != 'string') {
                 try {
