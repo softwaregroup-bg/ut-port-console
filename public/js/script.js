@@ -277,7 +277,7 @@ jQuery(document).ready(function(){
         // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
         var optionsBar = jQuery('#options', consoleWin.document);
-        var pluginsContainer = jQuery('<span style="display: inline-block; float: right"></span>');
+        var pluginsContainer = jQuery('<span style="margin: 0 10px; padding: 3px 10px; border-left: 1px solid grey; border-right: 1px solid grey"></span>');
         optionsBar.append(pluginsContainer);
 
         var dateTimePicker = jQuery('#dateTimePicker');
@@ -315,30 +315,60 @@ jQuery(document).ready(function(){
         // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
         // @@@@@@@@  logs querying  @@@@@@@@
         // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        var inputStyle = ' style="font-size: 100%; margin-right: 5px; width: 100px; font-family: tahoma, verdana, arial, helvetica, sans-serif;" '
+        var inputStyle = ' style="padding-left: 3px; font-size: 100%; margin-right: 5px; width: 90px; font-family: tahoma, verdana, arial, helvetica, sans-serif;" '
         var queryForm = jQuery('<form style="display: inline-block; padding-left: 20px; margin-left: 20px; border-left: 1px solid grey"></form>');
         var queryFrom = jQuery('<input type="text"' + inputStyle + 'data-field="datetime" readonly="">');
         var queryTo = jQuery('<input type="text"' + inputStyle + 'data-field="datetime" readonly="">');
-        var doQuery = jQuery('<input type="button" class="button" value="Search">');
+        var doQuery = jQuery('<input type="button" class="button" value="Query">');
         queryForm.append([queryFrom, queryTo, doQuery]);
         pluginsContainer.append(queryForm);
-        doQuery.click(function(evt) {
+        function getDbSearchCriteria() {
             var from = queryFrom.val();
             var to = queryTo.val();
             if (!from || !to) {
-                return;
+                return null;
             }
             from = from.split(/[-: ]/);
             to = to.split(/[-: ]/);
+            return JSON.stringify({
+                from: (new Date(from[2], from[1] - 1, from[0], from[3], from[4])).getTime(),
+                to: (new Date(to[2], to[1] - 1, to[0], to[3], to[4])).getTime()
+            });
+        }
+        doQuery.click(function(evt) {
+            var data = getDbSearchCriteria();
+            if (!data) {
+                return;
+            }
             jQuery.ajax({
                 url: '/query-logs',
                 type: 'POST',
-                data: JSON.stringify({
-                    from: (new Date(from[2], from[1] - 1, from[0], from[3], from[4])).getTime(),
-                    to: (new Date(to[2], to[1] - 1, to[0], to[3], to[4])).getTime()
-                }),
+                data: data,
                 contentType: 'application/json'
             });
+        });
+
+        // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+        // @@@@@@@@  export  @@@@@@@@
+        // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+        var exportForm = jQuery('<form style="display: inline-block; padding-left: 20px; margin-left: 20px; border-left: 1px solid grey"></form>');
+        var doExport = jQuery('<input type="button" class="button" style="margin-right: 10px;" value="Export Logs">');
+        exportForm.append(doExport);
+        pluginsContainer.append(exportForm);
+        var hiddenExport = document.createElement('a');
+        hiddenExport.style.display = 'none';
+        doExport.click(function(evt) {
+            var data = [];
+            var logEntries = consoleWin.logEntries;
+            if (!logEntries.length) {
+                return;
+            }
+            for (var i = 0, n = logEntries.length; i < n; i += 1) {
+                data.push(JSON.parse(logEntries[i].content).message);
+            }
+            hiddenExport.download = 'logs_' + (new Date()).getTime() + '.json';
+            hiddenExport.href = URL.createObjectURL(new Blob([JSON.stringify(data)], {type: 'application/json'}));
+            hiddenExport.click();
         });
         dateTimePicker.DateTimePicker({mode: 'datetime', parentElement: queryForm});
 
