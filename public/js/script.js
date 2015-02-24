@@ -1,6 +1,44 @@
-jQuery(document).ready(function(){
+jQuery(document).ready(function() {
+
+    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    // @@@@@@@@  Spinner start  @@@@@@@@
+    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+    var spinnerTarget = document.getElementById('spinner');
+    var spinner = new Spinner({
+        lines: 8, // The number of lines to draw
+        length: 0, // The length of each line
+        width: 30, // The line thickness
+        radius: 30, // The radius of the inner circle
+        corners: 1, // Corner roundness (0..1)
+        rotate: 90, // The rotation offset
+        direction: 1, // 1: clockwise, -1: counterclockwise
+        color: '#000', // #rgb or #rrggbb or array of colors
+        speed: 0.9, // Rounds per second
+        trail: 81, // Afterglow percentage
+        shadow: true, // Whether to render a shadow
+        hwaccel: false, // Whether to use hardware acceleration
+        className: 'spinner', // The CSS class to assign to the spinner
+        zIndex: 2e9, // The z-index (defaults to 2000000000)
+        top: '50%', // Top position relative to parent
+        left: '50%' // Left position relative to parent
+    });
+    function spinStart() {
+        spinnerTarget.style.display = 'block';
+        spinner.spin(spinnerTarget);
+    }
+
+    function spinStop() {
+        spinnerTarget.style.display = 'none';
+        spinner.stop();
+    }
+    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    // @@@@@@@@   Spinner end   @@@@@@@@
+    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
     var socket = io.connect(location.host + '/console');
     socket.on('logMessage', function(data) {
+        spinStart();
         try {data.message = JSON.parse(data.message)} catch (e) {/* don't handle */}
         log[data.level ? data.level : 'error'](data);
     });
@@ -14,6 +52,7 @@ jQuery(document).ready(function(){
     LEVELS[60] = 'fatal';
 
     socket.on('logJSON', function(data) {
+        spinStart();
         if (data.level === 10 || data.level === 20 || data.level === 30 || data.level === 40 || data.level === 50 || data.level === 60) {
             data.level = LEVELS[data.level];
         }
@@ -103,6 +142,7 @@ jQuery(document).ready(function(){
                 element.className = 'details';
             }
             element.innerHTML = content.message;
+            spinStop();
         };
         consoleWin.LogEntryMainElementContainer = function(logEntry, containerDomNode) {
             this.logEntry = logEntry;
@@ -177,7 +217,7 @@ jQuery(document).ready(function(){
             }
         }
         // @overrides above
-
+        
         // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
         // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
         // @@@@@@@@                 @@@@@@@@
@@ -349,7 +389,7 @@ jQuery(document).ready(function(){
         });
 
         // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        // @@@@@@@@  export  @@@@@@@@
+        // @@@@@@@@@@@  export  @@@@@@@@@@@@
         // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
         var exportForm = jQuery('<form style="display: inline-block; padding-left: 20px; margin-left: 20px; border-left: 1px solid grey"></form>');
         var doExport = jQuery('<input type="button" class="button" style="margin-right: 10px;" value="Export Logs">');

@@ -276,3 +276,13 @@ div#log div.separator {
     left:0px;
     right:0px;
 }
+
+#spinner{
+    z-index: 999;
+    position: fixed;
+    top:0px;
+    bottom:0px;
+    left:0px;
+    right:0px;
+    display: none;
+}
