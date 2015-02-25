@@ -4,13 +4,12 @@
     var Path = require('path');
     var util = require('util');
     var io = require('socket.io');
-    var fs = require('fs');
     var Hapi = require('hapi');
     var JSONStream = require('JSONStream');
     var _undefined;
 
     function Console() {
-        Port.call(this);
+        Port.apply(this, arguments);
         this.config = {
             id: 'debug_console',
             host: '127.0.0.1',
@@ -25,7 +24,7 @@
     util.inherits(Console, Port);
 
     Console.prototype.init = function ConsoleInit() {
-        Port.prototype.init.call(this);
+        Port.prototype.init.apply(this, arguments);
     };
 
     Console.prototype.readFromDB = function readFromDB(criteria) {
@@ -44,7 +43,7 @@
     // temp solution above
 
     Console.prototype.start = function ConsoleStart() {
-        Port.prototype.start.call(this);
+        Port.prototype.start.apply(this, arguments);
         var self = this;
         this.httpServer = new Hapi.Server();
         this.httpServer.connection({
@@ -108,7 +107,7 @@
     };
 
     Console.prototype.stop = function ConsoleStop() {
-        Port.prototype.stop.call(this);
+        Port.prototype.stop.apply(this, arguments);
         // cleanup
         this.socket.end('Console socket closed');
         this.httpServer.stop();
