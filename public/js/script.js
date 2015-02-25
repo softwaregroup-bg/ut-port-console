@@ -8,14 +8,14 @@ jQuery(document).ready(function() {
     var spinner = new Spinner({
         lines: 8, // The number of lines to draw
         length: 0, // The length of each line
-        width: 30, // The line thickness
+        width: 20, // The line thickness
         radius: 30, // The radius of the inner circle
         corners: 1, // Corner roundness (0..1)
         rotate: 90, // The rotation offset
         direction: 1, // 1: clockwise, -1: counterclockwise
-        color: '#000', // #rgb or #rrggbb or array of colors
-        speed: 0.9, // Rounds per second
-        trail: 81, // Afterglow percentage
+        color: '#888', // #rgb or #rrggbb or array of colors
+        speed: 0.7, // Rounds per second
+        trail: 50, // Afterglow percentage
         shadow: true, // Whether to render a shadow
         hwaccel: false, // Whether to use hardware acceleration
         className: 'spinner', // The CSS class to assign to the spinner
@@ -39,7 +39,7 @@ jQuery(document).ready(function() {
     var socket = io.connect(location.host + '/console');
     socket.on('logMessage', function(data) {
         spinStart();
-        try {data.message = JSON.parse(data.message)} catch (e) {/* don't handle */}
+        //try {data.message = JSON.parse(data.message)} catch (e) {/* don't handle */}
         log[data.level ? data.level : 'error'](data);
     });
 
