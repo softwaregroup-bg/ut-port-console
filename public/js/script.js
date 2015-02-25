@@ -39,7 +39,7 @@ jQuery(document).ready(function() {
     var socket = io.connect(location.host + '/console');
     socket.on('logMessage', function(data) {
         spinStart();
-        //try {data.message = JSON.parse(data.message)} catch (e) {/* don't handle */}
+        try {data.message = JSON.parse(data.message)} catch (e) {/* don't handle */}
         log[data.level ? data.level : 'error'](data);
     });
 
