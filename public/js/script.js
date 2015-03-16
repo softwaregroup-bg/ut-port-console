@@ -325,7 +325,7 @@ jQuery(document).ready(function() {
         // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
         // @@@@@@@   prettify all   @@@@@@@@
         // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        var prettifyContainer = jQuery('<span style="padding: 0 20px 0 0"></span>');
+        var prettifyContainer = jQuery('<span style="padding: 0 20px 0 0; display: inline-block"></span>');
         var prettifyCheckbox =jQuery('<input type="checkbox" id="prettify_all" title="Prettify" >Prettify</input>');
         pluginsContainer.append(prettifyContainer.append(prettifyCheckbox));
         prettifyCheckbox.click(function(evt) {
