@@ -323,10 +323,19 @@ jQuery(document).ready(function() {
         var dateTimePicker = jQuery('#dateTimePicker');
 
         // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+        // @@@@@@@   prettify all   @@@@@@@@
+        // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+        var prettifyContainer = jQuery('<span style="padding: 0 20px 0 0"></span>');
+        var prettifyCheckbox =jQuery('<input type="checkbox" id="prettify_all" title="Prettify" >Prettify</input>');
+        pluginsContainer.append(prettifyContainer.append(prettifyCheckbox));
+        prettifyCheckbox.click(function(evt) {
+            jss.set('div#log table tr td div span', {'white-space': this.checked ? 'pre' : 'inherit'});
+        })
+        // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
         // @@@@@@@@   file upload   @@@@@@@@
         // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-        var uploadForm = jQuery('<form enctype="multipart/form-data" style="display: inline-block;"></form>');
+        var uploadForm = jQuery('<form enctype="multipart/form-data" style="display: inline-block;border-left: 1px solid grey;padding-left: 20px"></form>');
         var uploadFormFile = jQuery('<input name="file" style="width: 150px" type="file" class="button"/>');
         var uploadFormSubmit = jQuery('<input type="button" value="Load" class="button"/>');
         uploadForm.append([uploadFormFile, uploadFormSubmit]);
