@@ -37,26 +37,23 @@ jQuery(document).ready(function() {
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
     var socket = io.connect(location.host + '/console');
-    socket.on('logMessage', function(data) {
+    /*socket.on('logMessage', function(data) {
         spinStart();
-        try {data.message = JSON.parse(data.message)} catch (e) {/* don't handle */}
+        try {data.message = JSON.parse(data.message)} catch (e) {*//* don't handle *//*}
         log[data.level ? data.level : 'error'](data);
-    });
+    });*/
 
-    var LEVELS = [];
-    LEVELS[10] = 'trace';
-    LEVELS[20] = 'debug';
-    LEVELS[30] = 'info';
-    LEVELS[40] = 'warn';
-    LEVELS[50] = 'error';
-    LEVELS[60] = 'fatal';
+    var LEVELS = {};
+    LEVELS['10'] = LEVELS['trace'] = 'trace';
+    LEVELS['20'] = LEVELS['debug'] = 'debug';
+    LEVELS['30'] = LEVELS['info'] = 'info';
+    LEVELS['40'] = LEVELS['warn'] = 'warn';
+    LEVELS['50'] = LEVELS['error'] = 'error';
+    LEVELS['60'] = LEVELS['fatal'] = 'fatal';
 
     socket.on('logJSON', function(data) {
-        spinStart();
-        if (data.level === 10 || data.level === 20 || data.level === 30 || data.level === 40 || data.level === 50 || data.level === 60) {
-            data.level = LEVELS[data.level];
-        }
-        log[data.level ? data.level : 'error'](data);
+        //spinStart();
+        log[LEVELS[data.level]](data);
     });
 
     var pageWrapper = document.getElementById('logger');
@@ -142,7 +139,7 @@ jQuery(document).ready(function() {
                 element.className = 'details';
             }
             element.innerHTML = content.message;
-            spinStop();
+            //spinStop();
         };
         consoleWin.LogEntryMainElementContainer = function(logEntry, containerDomNode) {
             this.logEntry = logEntry;

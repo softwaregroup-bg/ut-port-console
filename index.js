@@ -32,12 +32,15 @@
             return;
         }
         var self = this;
-        this.db.createValueStream({
+        this.db.createReadStream({
+            keys: false,
+            values: true,
+            valueEncoding : 'json',
             gte : criteria.from + '0000',
             lte : criteria.to + '9999'
         }).on('data', function(log) {
-            log = JSON.parse(log);
-            self.console.emit(log.timestamp ? 'logMessage' : 'logJSON', log);
+            //self.console.emit(log.timestamp ? 'logMessage' : 'logJSON', log);
+            self.console.emit('logJSON', log);
         });
     };
     // temp solution above
@@ -61,14 +64,14 @@
                 }
             }
         });
-        this.httpServer.route({
+        /*this.httpServer.route({
             method: 'POST',
             path:'/winston-log',
             handler: function(request, reply) {
                 self.console.emit('logMessage', request.payload.params);
                 return reply('');
             }
-        });
+        });*/
         this.httpServer.route({
             method: 'POST',
             path:'/upload-logs',
@@ -80,7 +83,8 @@
                 },
                 handler: function(request, reply) {
                     request.payload.files.pipe(JSONStream.parse('*')).on('data', function(log) {
-                        self.console.emit(log.timestamp ? 'logMessage' : 'logJSON', log);
+                        //self.console.emit(log.timestamp ? 'logMessage' : 'logJSON', log);
+                        self.console.emit('logJSON', log);
                     });
                     return reply('');
                 }
