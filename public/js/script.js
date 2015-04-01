@@ -46,15 +46,21 @@ jQuery(document).ready(function() {
     var LEVELS = {};
     LEVELS['10'] = LEVELS['trace'] = 'trace';
     LEVELS['20'] = LEVELS['debug'] = 'debug';
-    LEVELS['30'] = LEVELS['info'] = 'info';
-    LEVELS['40'] = LEVELS['warn'] = 'warn';
+    LEVELS['30'] = LEVELS['info']  = 'info';
+    LEVELS['40'] = LEVELS['warn']  = 'warn';
     LEVELS['50'] = LEVELS['error'] = 'error';
     LEVELS['60'] = LEVELS['fatal'] = 'fatal';
 
     socket.on('logJSON', function(data) {
-        //spinStart();
         log[LEVELS[data.level]](data);
     });
+    socket.on('spinStart', function() {
+        spinStart();
+    });
+    socket.on('spinStop', function() {
+        spinStop();
+    });
+
 
     var pageWrapper = document.getElementById('logger');
     socket.on('connect', function() {
@@ -139,7 +145,6 @@ jQuery(document).ready(function() {
                 element.className = 'details';
             }
             element.innerHTML = content.message;
-            //spinStop();
         };
         consoleWin.LogEntryMainElementContainer = function(logEntry, containerDomNode) {
             this.logEntry = logEntry;
