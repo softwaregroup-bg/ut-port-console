@@ -32,6 +32,19 @@ jQuery(document).ready(function() {
         spinnerTarget.style.display = 'none';
         spinner.stop();
     }
+
+    var autoSpinTimeout = null;
+    function autoSpin() {
+        if (!autoSpinTimeout) {
+            spinStart();
+        } else {
+            clearTimeout(autoSpinTimeout);
+        }
+        autoSpinTimeout = setTimeout(function() {
+            autoSpinTimeout = null;
+            spinStop();
+        }, 500);
+    }
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     // @@@@@@@@   Spinner end   @@@@@@@@
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -52,6 +65,7 @@ jQuery(document).ready(function() {
     LEVELS['60'] = LEVELS['fatal'] = 'fatal';
 
     socket.on('logJSON', function(data) {
+        autoSpin();
         log[LEVELS[data.level]](data);
     });
     socket.on('spinStart', function() {

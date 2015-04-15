@@ -32,7 +32,7 @@
             return;
         }
         var self = this;
-        this.console.emit('spinStart', '');
+        //this.console.emit('spinStart', '');
         this.db.createReadStream({
             keys: false,
             values: true,
@@ -42,8 +42,8 @@
         }).on('data', function(log) {
             //self.console.emit(log.timestamp ? 'logMessage' : 'logJSON', log);
             self.console.emit('logJSON', log);
-        }).on('end', function(){
-            self.console.emit('spinStop', '');
+        }).on('end', function() {
+            //self.console.emit('spinStop', '');
         });
     };
 
