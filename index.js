@@ -19,6 +19,8 @@
         this.httpServer = null;
         this.socket = null;
         this.console = null;
+        this.queue = [];
+        this.browserConnected = false;
     }
 
     util.inherits(Console, Port);
@@ -103,13 +105,27 @@
         this.socket = io(this.httpServer.listener);
         this.socket.of('/log').on('connection', function(socket) {
             socket.on('log', function(msg) {
-                self.console.emit('logJSON', msg);
+                self.emit(msg);
             });
         });
         this.console = this.socket.of('/console');
-        this.httpServer.start(function(){
+        this.console.on('connection', function() {
+            self.browserConnected = true;
+        })
+        this.httpServer.start(function() {
             console.log('go to: ' + self.httpServer.info.uri + ' to access the debug console');
         });
+    };
+
+    Console.prototype.emit = function emit(msg) {
+        if (this.browserConnected) {
+            this.queue.push(msg);
+            while (this.queue.length) {
+                this.console.emit('logJSON', this.queue.shift());
+            }
+        } else {
+            this.queue.length >= 50 ? this.queue.slice(1).push(msg) : this.queue.push(msg);
+        }
     };
 
     Console.prototype.stop = function ConsoleStop() {
@@ -124,6 +140,8 @@
         this.httpServer = _undefined;
         this.socket = _undefined;
         this.console = _undefined;
+        this.queue = _undefined;
+        this.browserConnected = _undefined;
     };
 
     return Console;
