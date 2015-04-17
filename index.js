@@ -124,7 +124,10 @@
                 this.console.emit('logJSON', this.queue.shift());
             }
         } else {
-            this.queue.length >= 50 ? this.queue.slice(1).push(msg) : this.queue.push(msg);
+            if (this.queue.length >= 50) {
+                this.queue.shift();
+            }
+            this.queue.push(msg);
         }
     };
 
