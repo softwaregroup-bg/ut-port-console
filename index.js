@@ -111,7 +111,8 @@
         this.console = this.socket.of('/console');
         this.console.on('connection', function() {
             self.browserConnected = true;
-        })
+        });
+
         this.httpServer.start(function() {
             console.log('go to: ' + self.httpServer.info.uri + ' to access the debug console');
         });

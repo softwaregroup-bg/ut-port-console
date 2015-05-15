@@ -134,7 +134,7 @@ jQuery(document).ready(function() {
                 try {
                     content.message =   '<span ondblclick="if (this.parentElement.className !==\'details\') {this.parentElement.className=\'details\'} else {this.parentElement.className=\'\'}">' +
                     ((content.message && content.message.msg) ? content.message.msg + '\r\n' : '') +
-                    JSON.stringify(content.message, null, 2) +
+                    JSON.stringify(content.message, null, 2).replace(/\\n /g,'\n') +
                     '</span>';
                 } catch (e) {/* don't handle */}
             }
