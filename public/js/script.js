@@ -113,6 +113,21 @@ jQuery(document).ready(function() {
             }
             return content;
         }
+        function hex2ascii(hex) {
+            var str = '';
+            for (var i = 0; i < hex.length; i += 2) {
+                var code = parseInt(hex.substr(i, 2), 16);
+                if (code === 9) {code = 8594} else
+                if (code === 10) {code = 8595} else
+                if (code === 13) {code = 8629} else
+                if (code === 15) {code = 9788} else
+                if (code === 27) {code = 8592} else
+                if (code === 28) {code = 8286} else
+                if (code < 32) {code = 32}
+                str += String.fromCharCode(code);
+            }
+            return str;
+        }
         consoleWin.LogEntryElementContainer.prototype.setContent = function(content, wrappedContent) {
             var searched = consoleWin.currentSearch && (content !== this.logEntry.formattedMessage);
             if (typeof content !== 'object') {
@@ -130,13 +145,35 @@ jQuery(document).ready(function() {
             content.context = (content.message && content.message.context) ? content.message.context : null;
             content.opcode = (content.message && content.message.$$ && content.message.$$.opcode) ? content.message.$$.opcode : (content.message && content.message.message && content.message.message.$$ && content.message.message.$$.opcode) ? content.message.message.$$.opcode : (content.message && (typeof content.message.message === 'string')) ? content.message.message : '';
 
-            if (typeof content.message != 'string') {
+            if (content.opcode === 'frameIn' || content.opcode === 'frameOut'){
                 try {
-                    content.message =   '<span ondblclick="if (this.parentElement.className !==\'details\') {this.parentElement.className=\'details\'} else {this.parentElement.className=\'\'}">' +
-                    ((content.message && content.message.msg) ? content.message.msg + '\r\n' : '') +
-                    JSON.stringify(content.message, null, 2).replace(/\\n /g,'\n') +
-                    '</span>';
-                } catch (e) {/* don't handle */}
+                    var lines = [], asciiLines = [];
+                    var hex = content.message.message.$$.frame;
+                    var ascii = hex2ascii(hex);
+                    for (var i=0; i<hex.length; i+=64){
+                        lines.push(hex.substr(i,64));
+                        asciiLines.push(ascii.substr(i/2,32));
+                    }
+                    content.message = '<span style="display: inline-block;" ondblclick="if (this.parentElement.className !==\'details\') {this.parentElement.className=\'details\'} else {this.parentElement.className=\'\'}">' +
+                        asciiLines.join('\r\n')+
+                        '</span><span style="display: inline-block; padding-left:10px" ondblclick="if (this.parentElement.className !==\'details\') {this.parentElement.className=\'details\'} else {this.parentElement.className=\'\'}">' +
+                        lines.join('\r\n')+
+                        '</span>'
+                        ;
+                } catch (e) {
+                    console.error(e);
+                }
+            } else {
+                if (typeof content.message != 'string') {
+                    try {
+                        content.message = '<span ondblclick="if (this.parentElement.className !==\'details\') {this.parentElement.className=\'details\'} else {this.parentElement.className=\'\'}">' +
+                            ((content.message && content.message.msg) ? content.message.msg + '\r\n' : '') +
+                            JSON.stringify(content.message, null, 2) +
+                            '</span>';
+                    } catch (e) {
+                        console.error(e);
+                    }
+                }
             }
             if (searched) {
                 content = setSearchMarkers(content);
@@ -233,7 +270,7 @@ jQuery(document).ready(function() {
             }
         }
         // @overrides above
-        
+
         // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
         // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
         // @@@@@@@@                 @@@@@@@@
