@@ -5,6 +5,7 @@
     var util = require('util');
     var io = require('socket.io');
     var Hapi = require('hapi');
+    var Inert = require('inert');
     var JSONStream = require('JSONStream');
     var _undefined;
 
@@ -53,6 +54,7 @@
         Port.prototype.start.apply(this, arguments);
         var self = this;
         this.httpServer = new Hapi.Server();
+        this.httpServer.register(Inert, function () {});
         this.httpServer.connection({
             host : this.config.host,
             port : this.config.port
