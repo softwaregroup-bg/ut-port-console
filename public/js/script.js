@@ -8,12 +8,12 @@ jQuery(document).ready(function() {
     var spinner = new Spinner({
         lines: 8, // The number of lines to draw
         length: 0, // The length of each line
-        width: 20, // The line thickness
-        radius: 30, // The radius of the inner circle
+        width: 3, // The line thickness
+        radius: 8, // The radius of the inner circle
         corners: 1, // Corner roundness (0..1)
         rotate: 90, // The rotation offset
         direction: 1, // 1: clockwise, -1: counterclockwise
-        color: '#888', // #rgb or #rrggbb or array of colors
+        color: 'red', // #rgb or #rrggbb or array of colors
         speed: 0.7, // Rounds per second
         trail: 50, // Afterglow percentage
         shadow: true, // Whether to render a shadow
