@@ -13,10 +13,8 @@
 
 #spinner{
     z-index: 999;
-    position: fixed;
-    top:0px;
-    bottom:0px;
-    left:0px;
-    right:0px;
+    position: absolute;
+    top:12px;
+    right:12px;
     display: none;
 }
