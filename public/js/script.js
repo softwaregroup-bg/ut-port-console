@@ -143,16 +143,20 @@ jQuery(document).ready(function() {
             ':' + ('00' + time.getSeconds()).substr(-2);
             content.sender = (content.message && content.message.name) ? content.message.name : null;
             content.context = (content.message && content.message.context) ? content.message.context : null;
-            content.opcode = (content.message && content.message.$$ && content.message.$$.opcode) ? content.message.$$.opcode : (content.message && content.message.message && content.message.message.$$ && content.message.message.$$.opcode) ? content.message.message.$$.opcode : (content.message && (typeof content.message.message === 'string')) ? content.message.message : '';
+            content.opcode = (content.message && content.message.$meta && content.message.$meta.opcode);
 
             if (content.opcode === 'frameIn' || content.opcode === 'frameOut'){
                 try {
                     var lines = [], asciiLines = [];
-                    var hex = content.message.message.$$.frame;
-                    var ascii = hex2ascii(hex);
-                    for (var i=0; i<hex.length; i+=64){
-                        lines.push(hex.substr(i,64));
-                        asciiLines.push(ascii.substr(i/2,32));
+                    var hex = content.message.message;
+                    if (typeof hex === 'string'){
+                        var ascii = hex2ascii(hex);
+                        for (var i=0; i<hex.length; i+=64){
+                            lines.push(hex.substr(i,64));
+                            asciiLines.push(ascii.substr(i/2,32));
+                        }
+                    } else {
+                        lines.push(JSON.stringify(hex, null,'  '));
                     }
                     content.message = '<span style="display: inline-block;" ondblclick="if (this.parentElement.className !==\'details\') {this.parentElement.className=\'details\'} else {this.parentElement.className=\'\'}">' +
                         asciiLines.join('\r\n')+
