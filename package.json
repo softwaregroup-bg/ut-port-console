@@ -9,7 +9,7 @@
     "ut-bus": "git@git.softwaregroup-bg.com:ut5/ut-run.git#meta"
   },
   "peerDependencies": {
-    "ut-bus": "~5.2.0"
+    "ut-bus": "~5.3.0"
   },
   "publishConfig": {
     "registry": "http://npm.softwaregroup-bg.com:5001"
