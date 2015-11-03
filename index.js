@@ -7,6 +7,7 @@
     var Hapi = require('hapi');
     var Inert = require('inert');
     var JSONStream = require('JSONStream');
+    var _ = require('lodash');
     var _undefined;
 
     function Console() {
@@ -14,7 +15,12 @@
         this.config = {
             id: 'debug_console',
             host: '127.0.0.1',
-            port: 30001
+            port: 30001,
+            server: {
+                state   : {
+                    strictHeader : false
+                }
+            }
         };
         this.db = null;
         this.httpServer = null;
@@ -54,11 +60,11 @@
         Port.prototype.start.apply(this, arguments);
         var self = this;
         this.httpServer = new Hapi.Server();
-        this.httpServer.register(Inert, function () {});
-        this.httpServer.connection({
-            host : this.config.host,
-            port : this.config.port
-        });
+        this.httpServer.register(Inert, function() {});
+        this.httpServer.connection(_.assign({
+            host    : this.config.host,
+            port    : this.config.port
+        }, this.config.server));
         this.httpServer.route({
             method: 'GET',
             path: '/{p*}',
