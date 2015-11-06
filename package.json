@@ -1,6 +1,6 @@
 {
   "name": "ut-port-console",
-  "version": "5.2.3",
+  "version": "5.2.4",
   "dependencies": {
     "JSONStream": "~0.10.0",
     "hapi": "~9.3.1",
