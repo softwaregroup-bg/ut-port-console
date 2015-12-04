@@ -117,6 +117,7 @@ Console.prototype.start = function ConsoleStart() {
     this.console = this.socket.of('/console');
     this.console.on('connection', function() {
         self.browserConnected = true;
+        self.emit('');
     });
 
     this.httpServer.start(function() {
@@ -131,7 +132,7 @@ Console.prototype.emit = function emit(msg) {
             this.console.emit('logJSON', this.queue.shift());
         }
     } else {
-        if (this.queue.length >= 50) {
+        if (this.queue.length >= 100) {
             this.queue.shift();
         }
         this.queue.push(msg);

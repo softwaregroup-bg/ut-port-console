@@ -65,6 +65,9 @@ jQuery(document).ready(function() {
     LEVELS['60'] = LEVELS['fatal'] = 'fatal';
 
     socket.on('logJSON', function(data) {
+        if (!data) {
+            return;
+        }
         autoSpin();
         log[LEVELS[data.level]](data);
     });
@@ -128,6 +131,13 @@ jQuery(document).ready(function() {
             }
             return str;
         }
+        var escapeXmlMap = {'>': '&gt;', '<': '&lt;', '\'': '&apos;', '"': '&quot;', '&': '&amp;'};
+        var escapeXmlRegExp = /([&"<>'])/g;
+        function escapeXml(str) {
+            return str.replace(escapeXmlRegExp, function(str, symbol) {
+                return escapeXmlMap[symbol];
+            });
+        }
         consoleWin.LogEntryElementContainer.prototype.setContent = function(content, wrappedContent) {
             var searched = consoleWin.currentSearch && (content !== this.logEntry.formattedMessage);
             if (typeof content !== 'object') {
@@ -159,9 +169,9 @@ jQuery(document).ready(function() {
                         lines.push(JSON.stringify(hex, null,'  '));
                     }
                     content.message = '<span style="display: inline-block;" ondblclick="if (this.parentElement.className !==\'details\') {this.parentElement.className=\'details\'} else {this.parentElement.className=\'\'}">' +
-                        asciiLines.join('\r\n')+
+                        asciiLines.join('\r\n') +
                         '</span><span style="display: inline-block; padding-left:10px" ondblclick="if (this.parentElement.className !==\'details\') {this.parentElement.className=\'details\'} else {this.parentElement.className=\'\'}">' +
-                        lines.join('\r\n')+
+                        escapeXml(lines.join('\r\n')) +
                         '</span>'
                         ;
                 } catch (e) {
@@ -171,12 +181,14 @@ jQuery(document).ready(function() {
                 if (typeof content.message != 'string') {
                     try {
                         content.message = '<span ondblclick="if (this.parentElement.className !==\'details\') {this.parentElement.className=\'details\'} else {this.parentElement.className=\'\'}">' +
-                            ((content.message && content.message.msg) ? content.message.msg + '\r\n' : '') +
-                            JSON.stringify(content.message, null, 2) +
+                            ((content.message && content.message.msg) ? escapeXml(content.message.msg) + '\r\n' : '') +
+                            escapeXml(JSON.stringify(content.message, null, 2)) +
                             '</span>';
                     } catch (e) {
                         console.error(e);
                     }
+                } else {
+                    content.message = escapeXml(content.message);
                 }
             }
             if (searched) {
