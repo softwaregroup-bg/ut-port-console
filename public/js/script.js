@@ -153,7 +153,7 @@ jQuery(document).ready(function() {
             ':' + ('00' + time.getSeconds()).substr(-2);
             content.sender = (content.message && content.message.name) ? content.message.name : null;
             content.context = (content.message && content.message.context) ? content.message.context : null;
-            content.opcode = (content.message && content.message.$meta && content.message.$meta.opcode);
+            content.opcode = (content.message && content.message.$meta && (content.message.$meta.method || content.message.$meta.opcode));
 
             if (content.opcode === 'frameIn' || content.opcode === 'frameOut'){
                 try {
