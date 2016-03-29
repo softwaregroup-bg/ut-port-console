@@ -5,7 +5,7 @@ var io = require('socket.io');
 var Hapi = require('hapi');
 var Inert = require('inert');
 var JSONStream = require('JSONStream');
-var _ = require('lodash');
+var assign = require('lodash/object/assign');
 var _undefined;
 
 function Console() {
@@ -59,7 +59,7 @@ Console.prototype.start = function ConsoleStart() {
     var self = this;
     this.httpServer = new Hapi.Server();
     this.httpServer.register(Inert, function() {});
-    this.httpServer.connection(_.assign({
+    this.httpServer.connection(assign({
         host: this.config.host,
         port: this.config.port
     }, this.config.server));
@@ -121,7 +121,7 @@ Console.prototype.start = function ConsoleStart() {
     });
 
     this.httpServer.start(function() {
-        console.log('go to: ' + self.httpServer.info.uri + ' to access the debug console');
+        self.log.info && self.log.info('go to: ' + self.httpServer.info.uri + ' to access the debug console');
     });
 };
 
