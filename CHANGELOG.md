@@ -1,3 +1,13 @@
+<a name="5.3.11"></a>
+## [5.3.11](https://git.softwaregroup-bg.com/ut5/ut-port-console/compare/v5.3.10...v5.3.11) (2016-04-15)
+
+
+### Features
+
+* add Gitlab-ci and Jenkins scripts ([1520ab5](https://git.softwaregroup-bg.com/ut5/ut-port-console/commit/1520ab5))
+
+
+
 <a name="5.3.10"></a>
 ## [5.3.10](https://git.softwaregroup-bg.com/ut5/ut-port-console/compare/v5.3.9...v5.3.10) (2016-04-11)
 
