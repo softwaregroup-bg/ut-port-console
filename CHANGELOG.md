@@ -1,3 +1,13 @@
+<a name="6.0.1"></a>
+## [6.0.1](https://git.softwaregroup-bg.com/ut5/ut-port-console/compare/v5.3.11...v6.0.1) (2016-04-19)
+
+
+### Features
+
+* update to hapi 13 ([1c83f25](https://git.softwaregroup-bg.com/ut5/ut-port-console/commit/1c83f25))
+
+
+
 <a name="5.3.11"></a>
 ## [5.3.11](https://git.softwaregroup-bg.com/ut5/ut-port-console/compare/v5.3.10...v5.3.11) (2016-04-15)
 
