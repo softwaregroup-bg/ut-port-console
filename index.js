@@ -15,6 +15,8 @@ function Console() {
         host: '127.0.0.1',
         port: 30001,
         server: {
+            host: '127.0.0.1',
+            port: 30001,
             state: {
                 strictHeader: false
             }
@@ -59,10 +61,7 @@ Console.prototype.start = function ConsoleStart() {
     var self = this;
     this.httpServer = new Hapi.Server();
     this.httpServer.register(Inert, function() {});
-    this.httpServer.connection(assign({
-        host: this.config.host,
-        port: this.config.port
-    }, this.config.server));
+    this.httpServer.connection(this.config.server);
     this.httpServer.route({
         method: 'GET',
         path: '/{p*}',
