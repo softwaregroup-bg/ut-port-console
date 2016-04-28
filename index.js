@@ -5,7 +5,6 @@ var io = require('socket.io');
 var Hapi = require('hapi');
 var Inert = require('inert');
 var JSONStream = require('JSONStream');
-var assign = require('lodash/object/assign');
 var _undefined;
 
 function Console() {
