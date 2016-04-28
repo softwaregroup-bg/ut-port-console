@@ -1,3 +1,13 @@
+<a name="6.0.2"></a>
+## [6.0.2](https://git.softwaregroup-bg.com/ut5/ut-port-console/compare/v6.0.1...v6.0.2) (2016-04-28)
+
+
+### Bug Fixes
+
+* host and port for console port([cc2eef5](https://git.softwaregroup-bg.com/ut5/ut-port-console/commit/cc2eef5))
+
+
+
 <a name="6.0.1"></a>
 ## [6.0.1](https://git.softwaregroup-bg.com/ut5/ut-port-console/compare/v5.3.11...v6.0.1) (2016-04-19)
 
