@@ -1,3 +1,13 @@
+<a name="6.0.4"></a>
+## [6.0.4](https://git.softwaregroup-bg.com/ut5/ut-port-console/compare/v6.0.3...v6.0.4) (2016-06-16)
+
+
+### Features
+
+* upgrade inert ([9f9683e](https://git.softwaregroup-bg.com/ut5/ut-port-console/commit/9f9683e))
+
+
+
 <a name="6.0.3"></a>
 ## [6.0.3](https://git.softwaregroup-bg.com/ut5/ut-port-console/compare/v6.0.2...v6.0.3) (2016-06-08)
 
