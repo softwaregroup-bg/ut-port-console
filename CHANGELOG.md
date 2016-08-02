@@ -1,3 +1,8 @@
+<a name="6.1.3"></a>
+## [6.1.3](https://git.softwaregroup-bg.com/ut5/ut-port-console/compare/v6.1.2...v6.1.3) (2016-08-02)
+
+
+
 <a name="6.1.2"></a>
 ## [6.1.2](https://git.softwaregroup-bg.com/ut5/ut-port-console/compare/v6.1.1...v6.1.2) (2016-07-23)
 
