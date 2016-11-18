@@ -79,7 +79,7 @@ Console.prototype.start = function ConsoleStart() {
             self.console.emit('logMessage', request.payload.params);
             return reply('');
         }
-    });*/
+    }); */
     this.httpServer.route({
         method: 'POST',
         path: '/upload-logs',
