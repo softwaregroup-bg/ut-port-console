@@ -1,3 +1,13 @@
+<a name="6.1.7"></a>
+## [6.1.7](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.1.6...v6.1.7) (2016-11-21)
+
+
+### Bug Fixes
+
+* update dependencies ([690e451](https://github.com/softwaregroup-bg/ut-port-console/commit/690e451))
+
+
+
 <a name="6.1.6"></a>
 ## [6.1.6](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.1.5...v6.1.6) (2016-11-18)
 
