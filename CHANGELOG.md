@@ -1,3 +1,13 @@
+<a name="6.1.8"></a>
+## [6.1.8](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.1.7...v6.1.8) (2016-11-23)
+
+
+### Bug Fixes
+
+* versions bump ([ef89041](https://github.com/softwaregroup-bg/ut-port-console/commit/ef89041))
+
+
+
 <a name="6.1.7"></a>
 ## [6.1.7](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.1.6...v6.1.7) (2016-11-21)
 
