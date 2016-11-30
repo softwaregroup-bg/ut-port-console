@@ -151,10 +151,31 @@ jQuery(document).ready(function() {
             ' ' + ('00' + time.getHours()).substr(-2) +
             ':' + ('00' + time.getMinutes()).substr(-2) +
             ':' + ('00' + time.getSeconds()).substr(-2);
-            content.sender = (content.message && content.message.name) ? content.message.name : null;
-            content.context = (content.message && content.message.context) ? content.message.context : null;
-            content.opcode = (content.message && content.message.$meta && (content.message.$meta.method || content.message.$meta.opcode));
-
+            content.sender = '';
+            content.context = '';
+            content.opcode = '';
+            content.mtid = '';
+            if (content.message) {
+                if (content.message.name) {
+                    content.sender = content.message.name;
+                }
+                if (content.message.context) {
+                    content.context = content.message.context;
+                }
+                if (content.message.$meta) {
+                    content.opcode = content.message.$meta.method || content.message.$meta.opcode || '';
+                    if (content.message.$meta.mtid) {
+                        content.mtid = content.message.$meta.mtid;
+                    }
+                }
+                if (!content.mtid) {
+                    if (content.message.mtid) {
+                        content.mtid = content.message.mtid;
+                    } else if (Array.isArray(content.message.message) && content.message.message.length) {
+                        content.mtid = content.message.message.pop().mtid || '';
+                    }
+                }
+            }
             if (content.opcode === 'frameIn' || content.opcode === 'frameOut'){
                 try {
                     var lines = [], asciiLines = [];
@@ -172,16 +193,14 @@ jQuery(document).ready(function() {
                         asciiLines.join('\r\n') +
                         '</span><span style="display: inline-block; padding-left:10px" ondblclick="if (this.parentElement.className !==\'details\') {this.parentElement.className=\'details\'} else {this.parentElement.className=\'\'}">' +
                         escapeXml(lines.join('\r\n')) +
-                        '</span>'
-                        ;
+                        '</span>';
                 } catch (e) {
                     console.error(e);
                 }
             } else {
-                if (typeof content.message != 'string') {
+                if (typeof content.message !== 'string') {
                     try {
                         content.message = '<span ondblclick="if (this.parentElement.className !==\'details\') {this.parentElement.className=\'details\'} else {this.parentElement.className=\'\'}">' +
-                            ((content.message && content.message.msg) ? escapeXml(content.message.msg) + '\r\n' : '') +
                             escapeXml(JSON.stringify(content.message, null, 2)) +
                             '</span>';
                     } catch (e) {
@@ -201,9 +220,10 @@ jQuery(document).ready(function() {
             element.style.whiteSpace = 'nowrap';
             this.mainDiv.appendChild(element).innerHTML = content.time;
             this.mainDiv.appendChild(document.createElement('td')).innerHTML = content.level;
-            this.mainDiv.appendChild(document.createElement('td')).innerHTML = content.sender || '';
-            this.mainDiv.appendChild(document.createElement('td')).innerHTML = content.context || '';
+            this.mainDiv.appendChild(document.createElement('td')).innerHTML = content.sender;
+            this.mainDiv.appendChild(document.createElement('td')).innerHTML = content.context;
             this.mainDiv.appendChild(document.createElement('td')).innerHTML = content.opcode;
+            this.mainDiv.appendChild(document.createElement('td')).innerHTML = content.mtid;
             element = this.mainDiv.appendChild(document.createElement('td'));
             if (detailsDiv) {
                 element = element.appendChild(detailsDiv);
