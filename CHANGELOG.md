@@ -1,3 +1,13 @@
+<a name="6.1.9"></a>
+## [6.1.9](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.1.8...v6.1.9) (2016-11-30)
+
+
+### Bug Fixes
+
+* add mtid column in debug console ([8b0cc22](https://github.com/softwaregroup-bg/ut-port-console/commit/8b0cc22))
+
+
+
 <a name="6.1.8"></a>
 ## [6.1.8](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.1.7...v6.1.8) (2016-11-23)
 
