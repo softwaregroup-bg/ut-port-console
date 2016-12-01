@@ -222,8 +222,8 @@ jQuery(document).ready(function() {
             this.mainDiv.appendChild(document.createElement('td')).innerHTML = content.level;
             this.mainDiv.appendChild(document.createElement('td')).innerHTML = content.sender;
             this.mainDiv.appendChild(document.createElement('td')).innerHTML = content.context;
-            this.mainDiv.appendChild(document.createElement('td')).innerHTML = content.opcode;
             this.mainDiv.appendChild(document.createElement('td')).innerHTML = content.mtid;
+            this.mainDiv.appendChild(document.createElement('td')).innerHTML = content.opcode;
             element = this.mainDiv.appendChild(document.createElement('td'));
             if (detailsDiv) {
                 element = element.appendChild(detailsDiv);

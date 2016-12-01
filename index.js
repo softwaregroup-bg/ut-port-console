@@ -11,8 +11,6 @@ function Console() {
     Port.apply(this, arguments);
     this.config = {
         id: 'debug_console',
-        host: '127.0.0.1',
-        port: 30001,
         server: {
             host: '127.0.0.1',
             port: 30001,
