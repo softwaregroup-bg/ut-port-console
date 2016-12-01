@@ -1,3 +1,13 @@
+<a name="6.1.10"></a>
+## [6.1.10](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.1.9...v6.1.10) (2016-12-01)
+
+
+### Bug Fixes
+
+* swap mtid and opcode to match stdout console ([d011295](https://github.com/softwaregroup-bg/ut-port-console/commit/d011295))
+
+
+
 <a name="6.1.9"></a>
 ## [6.1.9](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.1.8...v6.1.9) (2016-11-30)
 
