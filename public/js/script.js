@@ -129,6 +129,9 @@ jQuery(document).ready(function() {
                 if (code < 32) {code = 32}
                 str += String.fromCharCode(code);
             }
+            if (str.length < 32) {
+                str = (str + ' '.repeat(32)).substr(0, 32);
+            }
             return str;
         }
         var escapeXmlMap = {'>': '&gt;', '<': '&lt;', '\'': '&apos;', '"': '&quot;', '&': '&amp;'};
@@ -176,7 +179,7 @@ jQuery(document).ready(function() {
                     }
                 }
             }
-            if (content.opcode === 'frameIn' || content.opcode === 'frameOut'){
+            if (content.mtid === 'frame'){
                 try {
                     var lines = [], asciiLines = [];
                     var hex = content.message.message;
