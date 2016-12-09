@@ -1,3 +1,13 @@
+<a name="6.1.11"></a>
+## [6.1.11](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.1.10...v6.1.11) (2016-12-09)
+
+
+### Bug Fixes
+
+* fix frame alignment ([1eb34a0](https://github.com/softwaregroup-bg/ut-port-console/commit/1eb34a0))
+
+
+
 <a name="6.1.10"></a>
 ## [6.1.10](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.1.9...v6.1.10) (2016-12-01)
 
