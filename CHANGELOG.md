@@ -1,3 +1,14 @@
+<a name="6.1.12"></a>
+## [6.1.12](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.1.11...v6.1.12) (2016-12-15)
+
+
+### Bug Fixes
+
+* deps versions bump ([17b55c9](https://github.com/softwaregroup-bg/ut-port-console/commit/17b55c9))
+* deps versions bump ([d3f3521](https://github.com/softwaregroup-bg/ut-port-console/commit/d3f3521))
+
+
+
 <a name="6.1.11"></a>
 ## [6.1.11](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.1.10...v6.1.11) (2016-12-09)
 
