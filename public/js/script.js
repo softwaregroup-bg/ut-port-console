@@ -150,7 +150,7 @@ jQuery(document).ready(function() {
             var time = content.timestamp ? new Date(content.timestamp) : new Date();
             content.time = '' + time.getFullYear() +
             '-' + ('00' + (time.getMonth() + 1)).substr(-2) +
-            '-' + ('00' + time.getDay()).substr(-2) +
+            '-' + ('00' + time.getDate()).substr(-2) +
             ' ' + ('00' + time.getHours()).substr(-2) +
             ':' + ('00' + time.getMinutes()).substr(-2) +
             ':' + ('00' + time.getSeconds()).substr(-2);
