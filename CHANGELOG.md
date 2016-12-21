@@ -1,3 +1,13 @@
+<a name="6.2.1"></a>
+## [6.2.1](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.2.0...v6.2.1) (2016-12-21)
+
+
+### Bug Fixes
+
+* typo ([8a4a51c](https://github.com/softwaregroup-bg/ut-port-console/commit/8a4a51c))
+
+
+
 <a name="6.2.0"></a>
 # [6.2.0](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.1.12...v6.2.0) (2016-12-20)
 
