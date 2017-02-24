@@ -236,6 +236,9 @@ jQuery(document).ready(function() {
             }
             element.innerHTML = content.message;
         };
+
+        var exists = {};
+
         consoleWin.LogEntryMainElementContainer = function(logEntry, containerDomNode) {
             this.logEntry = logEntry;
             this.containerDomNode = containerDomNode;
@@ -246,9 +249,9 @@ jQuery(document).ready(function() {
             var context = null;
             var className = null;
             function jssSet(name, value) {
-                var tr = jss.get(name);
-                if (!tr || !tr.display) {
+                if (!exists[name]) {
                     jss.set(name, value);
+                    exists[name] = true;
                 }
             }
             try {
