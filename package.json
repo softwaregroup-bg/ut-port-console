@@ -10,10 +10,10 @@
   },
   "devDependencies": {
     "socket.io-client": "1.7.2",
-    "ut-tools": "^5.11.1"
+    "ut-tools": "^5.13.5"
   },
   "peerDependencies": {
-    "ut-bus": "~5.8.1"
+    "ut-bus": "^5.8.2"
   },
   "description": "UT port console module",
   "scripts": {
