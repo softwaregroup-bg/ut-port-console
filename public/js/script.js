@@ -245,20 +245,26 @@ jQuery(document).ready(function() {
             var name = null;
             var context = null;
             var className = null;
+            function jssSet(name, value) {
+                var tr = jss.get(name);
+                if (!tr || !tr.display) {
+                    jss.set(name, value);
+                }
+            }
             try {
                 msg = JSON.parse(logEntry.formattedMessage).message;
                 if (msg.name) {
                     className = msg.name.replace(/ /g, '_');
                     customClasses += 'name_' + className + ' ';
-                    jss.set('tr.logentry.' + 'name_' + className, {'display': 'table-row'});
-                    jss.set('div.' + 'name_' + className + '#log *.logentry.' + 'name_' + className, {'display': 'none'});
+                    jssSet('tr.logentry.name_' + className, {'display': 'table-row'});
+                    jssSet('div.name_' + className + '#log *.logentry.name_' + className, {'display': 'none'});
                     customToolbars['name'].addOption(className, msg.name);
                 }
                 if (msg.context) {
                     className = msg.context.replace(/ /g, '_');
                     customClasses += 'context_' + className + ' ';
-                    jss.set('tr.logentry.' + 'context_' + className, {'display': 'table-row'});
-                    jss.set('div.' + 'context_' + className + '#log *.logentry.' + 'context_' + className, {'display': 'none'});
+                    jssSet('tr.logentry.context_' + className, {'display': 'table-row'});
+                    jssSet('div.context_' + className + '#log *.logentry.context_' + className, {'display': 'none'});
                     customToolbars['context'].addOption(className, msg.context);
                 }
             } catch (e) {
