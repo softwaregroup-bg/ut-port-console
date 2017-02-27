@@ -1,3 +1,15 @@
+<a name="6.2.3"></a>
+## [6.2.3](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.2.2...v6.2.3) (2017-02-27)
+
+
+### Bug Fixes
+
+* jss.get is also slow, avoid it ([a9f9309](https://github.com/softwaregroup-bg/ut-port-console/commit/a9f9309))
+* jss.set is not replacing existing styles ([b9dba00](https://github.com/softwaregroup-bg/ut-port-console/commit/b9dba00))
+* update dependencies ([230cbfc](https://github.com/softwaregroup-bg/ut-port-console/commit/230cbfc))
+
+
+
 <a name="6.2.2"></a>
 ## [6.2.2](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.2.1...v6.2.2) (2016-12-23)
 
