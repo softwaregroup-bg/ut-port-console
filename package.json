@@ -9,11 +9,11 @@
     "socket.io": "1.7.2"
   },
   "devDependencies": {
-    "socket.io-client": "1.7.2",
+    "socket.io-client": "1.7.3",
     "ut-tools": "^5.13.5"
   },
   "peerDependencies": {
-    "ut-bus": "^5.8.2"
+    "ut-bus": "^5.9.0"
   },
   "description": "UT port console module",
   "scripts": {
