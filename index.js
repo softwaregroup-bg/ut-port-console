@@ -138,7 +138,7 @@ Console.prototype.emit = function emit(msg) {
 Console.prototype.stop = function ConsoleStop() {
     Port.prototype.stop.apply(this, arguments);
     // cleanup
-    this.socket.end('Console socket closed');
+    this.socket.close('Console socket closed');
     this.httpServer.stop();
     if (this.db && this.db.close) {
         this.db.close();
