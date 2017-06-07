@@ -5,6 +5,7 @@ var io = require('socket.io');
 var Hapi = require('hapi');
 var Inert = require('inert');
 var JSONStream = require('JSONStream');
+var utWss = require('ut-port-httpserver/socketServer')
 var ws = require('ws');
 var _undefined;
 
@@ -25,6 +26,7 @@ function Console() {
     this.webSockets = [];
     this.socket = null;
     this.wss = null;
+    this.utWss = null;
     this.console = null;
     this.wsConsole = null;
     this.queue = [];
@@ -75,14 +77,6 @@ Console.prototype.start = function ConsoleStart() {
             }
         }
     });
-    /* this.httpServer.route({
-        method: 'POST',
-        path:'/winston-log',
-        handler: function(request, reply) {
-            self.console.emit('logMessage', request.payload.params);
-            return reply('');
-        }
-    }); */
     this.httpServer.route({
         method: 'POST',
         path: '/upload-logs',
@@ -109,7 +103,7 @@ Console.prototype.start = function ConsoleStart() {
             return reply('');
         }
     });
-    // this.socket = io(this.httpServer.listener);
+
     this.socket = io(this.httpServer.listener);
     this.socket.of('/log').on('connection', function(socket) {
         socket.on('log', function(msg) {
@@ -117,22 +111,13 @@ Console.prototype.start = function ConsoleStart() {
         });
     });
 
-    this.wss = new ws.Server({
-        server: this.httpServer.listener
-    });
-    this.wss.on('connection', (socket) => {
-        self.webSockets.push(socket);
-        socket.on('close', () => {
-            self.webSockets = self.webSockets.reduce((accomu, s) => {
-                if(socket !== s) {
-                    accomu.push(s);
-                }
-                return accomu;
-            }, []);
-        });
+    this.utWss = new utWss({}, {disableXsrf: {ws: true}, disablePermissionVerify: {ws: true}}); // @TODO
+    this.utWss.on('connection', () => {
         self.browserConnected = true;
         self.emit('logJSON', '');
     });
+    this.utWss.start(this.httpServer.listener);
+    this.utWss.registerPath('/status');
 
     this.httpServer.start(function() {
         self.log.info && self.log.info('go to: ' + self.httpServer.info.uri + ' to access the debug console');
@@ -144,7 +129,7 @@ Console.prototype.emit = function emit(type, msg) {
         this.queue.push({type, msg});
         while (this.queue.length) {
             var msg  = this.queue.shift();
-            this.webSockets.map((s) => (s.send(JSON.stringify(msg))))
+            this.utWss.publish({path: '/status'}, JSON.stringify(msg));
         }
     } else {
         if (this.queue.length >= 100) {

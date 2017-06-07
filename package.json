@@ -7,7 +7,8 @@
     "hapi": "16.0.2",
     "inert": "4.0.4",
     "lodash.assign": "4.2.0",
-    "socket.io": "1.7.3"
+    "socket.io": "1.7.3",
+    "ut-port-httpserver": "8.10.0"
   },
   "devDependencies": {
     "socket.io-client": "1.7.3",
