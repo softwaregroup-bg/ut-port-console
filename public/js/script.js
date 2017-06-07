@@ -49,12 +49,41 @@ jQuery(document).ready(function() {
     // @@@@@@@@   Spinner end   @@@@@@@@
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-    var socket = io.connect(location.host + '/console');
-    /*socket.on('logMessage', function(data) {
-        spinStart();
-        try {data.message = JSON.parse(data.message)} catch (e) {*//* don't handle *//*}
-        log[data.level ? data.level : 'error'](data);
-    });*/
+    var pageWrapper = document.getElementById('logger');
+    function wsInit() {
+        var ws = new window.WebSocket('ws://' + window.location.host + '/status?xsrf=');
+        ws.onopen = function(e) {
+            console.log('connected');
+            ws.send('test');
+            pageWrapper.style.borderTop = 'none';
+        }
+        ws.onclose = function(e) {
+            pageWrapper.style.borderTop = '5px solid red';
+            setTimeout(wsInit, 2000);
+        }
+
+        ws.onmessage = function(e) {
+            var data = JSON.parse(e.data);
+            var msg = data.msg;
+
+            switch(data.type) {
+                case 'logJSON':
+                    if (!msg) {
+                        return;
+                    }
+                    autoSpin();
+                    log[LEVELS[msg.level]](msg);
+                    break;
+                case 'spinStart':
+                    spinStart();
+                    break;
+                case 'spinStop':
+                    spinStop();
+                    break;
+            }
+        };
+    };
+    wsInit();
 
     var LEVELS = {};
     LEVELS['10'] = LEVELS['trace'] = 'trace';
@@ -64,36 +93,6 @@ jQuery(document).ready(function() {
     LEVELS['50'] = LEVELS['error'] = 'error';
     LEVELS['60'] = LEVELS['fatal'] = 'fatal';
 
-    socket.on('logJSON', function(data) {
-        if (!data) {
-            return;
-        }
-        autoSpin();
-        log[LEVELS[data.level]](data);
-    });
-    socket.on('spinStart', function() {
-        spinStart();
-    });
-    socket.on('spinStop', function() {
-        spinStop();
-    });
-
-
-    var pageWrapper = document.getElementById('logger');
-    socket.on('connect', function() {
-        console.log('connected');
-        socket.emit('test');
-        pageWrapper.style.borderTop = 'none';
-    });
-
-    socket.on('disconnect', function() {
-        pageWrapper.style.borderTop = '5px solid red';
-    });
-
-    /*log4javascript.Level.TAG = new log4javascript.Level(70000, "TAG");
-     log4javascript.tag = function() {
-     this.log(this.Level.TAG, arguments);
-     };*/
     var log = log4javascript.getLogger('main');
     log.setLevel(log4javascript.Level.TRACE);
     var appender = new log4javascript.InPageAppender('logger', false, false, true, '100%', '100%');

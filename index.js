@@ -5,6 +5,7 @@ var io = require('socket.io');
 var Hapi = require('hapi');
 var Inert = require('inert');
 var JSONStream = require('JSONStream');
+var ws = require('ws');
 var _undefined;
 
 function Console() {
@@ -21,8 +22,11 @@ function Console() {
     };
     this.db = null;
     this.httpServer = null;
+    this.webSockets = [];
     this.socket = null;
+    this.wss = null;
     this.console = null;
+    this.wsConsole = null;
     this.queue = [];
     this.browserConnected = false;
 }
@@ -47,7 +51,8 @@ Console.prototype.readFromDB = function readFromDB(criteria) {
         lte: criteria.to + '9999'
     }).on('data', function(log) {
         // self.console.emit(log.timestamp ? 'logMessage' : 'logJSON', log);
-        self.console.emit('logJSON', log);
+        // self.console.emit('logJSON', log);
+        self.wss.send({type: 'logJSON', msg: log});
     }).on('end', function() {
         // self.console.emit('spinStop', '');
     });
@@ -90,7 +95,7 @@ Console.prototype.start = function ConsoleStart() {
             handler: function(request, reply) {
                 request.payload.files.pipe(JSONStream.parse('*')).on('data', function(log) {
                     // self.console.emit(log.timestamp ? 'logMessage' : 'logJSON', log);
-                    self.console.emit('logJSON', log);
+                    self.wss.send({type: 'logJSON', msg: log});
                 });
                 return reply('');
             }
@@ -104,16 +109,29 @@ Console.prototype.start = function ConsoleStart() {
             return reply('');
         }
     });
+    // this.socket = io(this.httpServer.listener);
     this.socket = io(this.httpServer.listener);
     this.socket.of('/log').on('connection', function(socket) {
         socket.on('log', function(msg) {
-            self.emit(msg);
+            self.emit('logJSON', msg);
         });
     });
-    this.console = this.socket.of('/console');
-    this.console.on('connection', function() {
+
+    this.wss = new ws.Server({
+        server: this.httpServer.listener
+    });
+    this.wss.on('connection', (socket) => {
+        self.webSockets.push(socket);
+        socket.on('close', () => {
+            self.webSockets = self.webSockets.reduce((accomu, s) => {
+                if(socket !== s) {
+                    accomu.push(s);
+                }
+                return accomu;
+            }, []);
+        });
         self.browserConnected = true;
-        self.emit('');
+        self.emit('logJSON', '');
     });
 
     this.httpServer.start(function() {
@@ -121,17 +139,18 @@ Console.prototype.start = function ConsoleStart() {
     });
 };
 
-Console.prototype.emit = function emit(msg) {
+Console.prototype.emit = function emit(type, msg) {
     if (this.browserConnected) {
-        this.queue.push(msg);
+        this.queue.push({type, msg});
         while (this.queue.length) {
-            this.console.emit('logJSON', this.queue.shift());
+            var msg  = this.queue.shift();
+            this.webSockets.map((s) => (s.send(JSON.stringify(msg))))
         }
     } else {
         if (this.queue.length >= 100) {
             this.queue.shift();
         }
-        this.queue.push(msg);
+        this.queue.push({type, msg});
     }
 };
 
