@@ -1,3 +1,13 @@
+<a name="6.3.0"></a>
+# [6.3.0](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.2.13...v6.3.0) (2017-06-09)
+
+
+### Features
+
+* implement socket security ([00cc417](https://github.com/softwaregroup-bg/ut-port-console/commit/00cc417))
+
+
+
 <a name="6.2.13"></a>
 ## [6.2.13](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.2.12...v6.2.13) (2017-05-22)
 
