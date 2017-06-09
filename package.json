@@ -11,7 +11,7 @@
     "lodash.assign": "4.2.0",
     "jsonwebtoken": "7.4.1",
     "socket.io": "1.7.3",
-    "ut-port-httpserver": "8.10.0"
+    "ut-port-httpserver": "^8.10.1"
   },
   "devDependencies": {
     "socket.io-client": "1.7.3",
