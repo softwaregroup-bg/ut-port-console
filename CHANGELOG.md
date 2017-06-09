@@ -1,3 +1,13 @@
+<a name="6.3.1"></a>
+## [6.3.1](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.3.0...v6.3.1) (2017-06-09)
+
+
+### Bug Fixes
+
+* untested code ([5271525](https://github.com/softwaregroup-bg/ut-port-console/commit/5271525))
+
+
+
 <a name="6.3.0"></a>
 # [6.3.0](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.2.13...v6.3.0) (2017-06-09)
 
