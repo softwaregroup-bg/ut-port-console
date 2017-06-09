@@ -6,7 +6,10 @@
     "JSONStream": "1.3.0",
     "hapi": "16.0.2",
     "inert": "4.0.4",
+    "boom": "5.1.0",
+    "lodash.merge": "4.6.0",
     "lodash.assign": "4.2.0",
+    "jsonwebtoken": "7.4.1",
     "socket.io": "1.7.3",
     "ut-port-httpserver": "8.10.0"
   },

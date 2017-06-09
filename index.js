@@ -1,17 +1,19 @@
-var Port = require('ut-bus/port');
-var Path = require('path');
-var util = require('util');
-var io = require('socket.io');
-var Hapi = require('hapi');
-var Inert = require('inert');
-var JSONStream = require('JSONStream');
-var utWss = require('ut-port-httpserver/socketServer')
-var ws = require('ws');
-var _undefined;
+const Port = require('ut-bus/port');
+const Path = require('path');
+const util = require('util');
+const io = require('socket.io');
+const Hapi = require('hapi');
+const Inert = require('inert');
+const JSONStream = require('JSONStream');
+const UtWss = require('ut-port-httpserver/socketServer');
+const jwt = require('jsonwebtoken');
+const Boom = require('boom');
+var merge = require('lodash.merge');
+const _undefined = undefined;
 
-function Console() {
+function Console(config) {
     Port.apply(this, arguments);
-    this.config = {
+    this.config = merge({
         id: 'debug_console',
         server: {
             host: '127.0.0.1',
@@ -19,13 +21,32 @@ function Console() {
             state: {
                 strictHeader: false
             }
+        },
+        cookie: {
+            ttl: 100 * 60 * 1000,
+            encoding: 'none',
+            isSecure: true,
+            isHttpOnly: true,
+            clearInvalid: false,
+            strictHeader: true
+        },
+        ssoAuthUrl: 'not configured',
+        jwt: {
+            cookieKey: 'ut5-cookie',
+            key: 'ut5-secret',
+            verifyOptions: {
+                ignoreExpiration: true,
+                algorithms: ['HS256']
+            },
+            signOptions: {
+                expiresIn: '1h',
+                algorithm: 'HS256'
+            }
         }
-    };
+    }, (config || {}));
     this.db = null;
     this.httpServer = null;
-    this.webSockets = [];
     this.socket = null;
-    this.wss = null;
     this.utWss = null;
     this.console = null;
     this.wsConsole = null;
@@ -54,7 +75,7 @@ Console.prototype.readFromDB = function readFromDB(criteria) {
     }).on('data', function(log) {
         // self.console.emit(log.timestamp ? 'logMessage' : 'logJSON', log);
         // self.console.emit('logJSON', log);
-        self.wss.send({type: 'logJSON', msg: log});
+        self.emit('logJSON', log);
     }).on('end', function() {
         // self.console.emit('spinStop', '');
     });
@@ -78,6 +99,55 @@ Console.prototype.start = function ConsoleStart() {
         }
     });
     this.httpServer.route({
+        method: 'GET',
+        path: '/sso/client',
+        config: {auth: false},
+        handler: {
+            file: Path.join(__dirname, 'public', 'sso.html')
+        }
+    });
+    this.httpServer.route({
+        method: 'GET',
+        path: '/js/config.js',
+        config: {auth: false},
+        handler: (req, reply) => {
+            var config = {
+                ssoAuthUrl: this.config.ssoAuthUrl,
+                xsrfToken: (req.state && req.state['x-xsrf-token'])
+            };
+            reply(`var config = ${JSON.stringify(config)}`);
+        }
+    });
+    this.httpServer.route({
+        method: 'POST',
+        path: '/sso/client',
+        config: {auth: false},
+        handler: (req, reply) => {
+            var cookieConf = Object.assign({}, this.config.cookie, {path: '/'});
+            if (req.payload && req.payload.cookie && req.payload.cookie.name && req.payload.cookie.value) {
+                jwt.verify(req.payload.cookie.value, this.config.jwt.key, Object.assign({}, this.config.jwt.verifyOptions, {ignoreExpiration: false}), (err, decoded) => {
+                    if (err) {
+                        reply(Boom.unauthorized());
+                    } else {
+                        reply('')
+                        .state(
+                            req.payload.cookie.name,
+                            req.payload.cookie.value,
+                            cookieConf
+                        )
+                        .state(
+                            'x-xsrf-token',
+                            decoded.xsrfToken,
+                            cookieConf
+                        );
+                    }
+                });
+            } else {
+                reply(Boom.unauthorized());
+            }
+        }
+    });
+    this.httpServer.route({
         method: 'POST',
         path: '/upload-logs',
         config: {
@@ -89,12 +159,13 @@ Console.prototype.start = function ConsoleStart() {
             handler: function(request, reply) {
                 request.payload.files.pipe(JSONStream.parse('*')).on('data', function(log) {
                     // self.console.emit(log.timestamp ? 'logMessage' : 'logJSON', log);
-                    self.wss.send({type: 'logJSON', msg: log});
+                    self.emit('logJSON', log);
                 });
                 return reply('');
             }
         }
     });
+
     this.httpServer.route({
         method: 'POST',
         path: '/query-logs',
@@ -111,7 +182,7 @@ Console.prototype.start = function ConsoleStart() {
         });
     });
 
-    this.utWss = new utWss({}, {disableXsrf: {ws: true}, disablePermissionVerify: {ws: true}}); // @TODO
+    this.utWss = new UtWss({log: this.log}, this.config);
     this.utWss.on('connection', () => {
         self.browserConnected = true;
         self.emit('logJSON', '');
@@ -128,8 +199,7 @@ Console.prototype.emit = function emit(type, msg) {
     if (this.browserConnected) {
         this.queue.push({type, msg});
         while (this.queue.length) {
-            var msg  = this.queue.shift();
-            this.utWss.publish({path: '/status'}, JSON.stringify(msg));
+            this.utWss.publish({path: '/status'}, JSON.stringify(this.queue.shift()));
         }
     } else {
         if (this.queue.length >= 100) {
