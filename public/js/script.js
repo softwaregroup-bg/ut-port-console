@@ -1,5 +1,16 @@
-jQuery(document).ready(function() {
+/* global URL,Blob,FormData,jQuery,Spinner,log4javascript,btoa,config */
 
+function pendingAuthorization(closeCode) {
+    if (closeCode === 401) {
+        if (config.ssoAuthUrl) {
+            setTimeout(() => {
+                window.location = `${config.ssoAuthUrl}${btoa(window.location.href)}`;
+            }, 2000);
+            return true;
+        }
+    }
+};
+jQuery(document).ready(function() {
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     // @@@@@@@@  Spinner start  @@@@@@@@
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -49,60 +60,64 @@ jQuery(document).ready(function() {
     // @@@@@@@@   Spinner end   @@@@@@@@
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-    var socket = io.connect(location.host + '/console');
-    /*socket.on('logMessage', function(data) {
-        spinStart();
-        try {data.message = JSON.parse(data.message)} catch (e) {*//* don't handle *//*}
-        log[data.level ? data.level : 'error'](data);
-    });*/
+    var pageWrapper = document.getElementById('logger');
+    function wsInit() {
+        var xsrfToken = '';
+        if (typeof (config) !== 'undefined' && config && config.xsrfToken) {
+            xsrfToken = config.xsrfToken;
+        }
+
+        var ws = new window.WebSocket('ws://' + window.location.host + '/status?xsrf=' + xsrfToken);
+        ws.onopen = function(e) {
+            console.log('connected');
+            ws.send('test');
+            pageWrapper.style.borderTop = 'none';
+        };
+        ws.onclose = function(event) {
+            pageWrapper.style.borderTop = '5px solid red';
+            setTimeout(wsInit, 2000);
+            if (pendingAuthorization(event && event.code && (event.code - 4000))) {
+                return;
+            }
+        };
+
+        ws.onmessage = function(e) {
+            var data = JSON.parse(e.data);
+            var msg = data.msg;
+
+            switch (data.type) {
+                case 'logJSON':
+                    if (!msg) {
+                        return;
+                    }
+                    autoSpin();
+                    log[LEVELS[msg.level]](msg);
+                    break;
+                case 'spinStart':
+                    spinStart();
+                    break;
+                case 'spinStop':
+                    spinStop();
+                    break;
+            }
+        };
+    };
+    wsInit();
 
     var LEVELS = {};
     LEVELS['10'] = LEVELS['trace'] = 'trace';
     LEVELS['20'] = LEVELS['debug'] = 'debug';
-    LEVELS['30'] = LEVELS['info']  = 'info';
-    LEVELS['40'] = LEVELS['warn']  = 'warn';
+    LEVELS['30'] = LEVELS['info'] = 'info';
+    LEVELS['40'] = LEVELS['warn'] = 'warn';
     LEVELS['50'] = LEVELS['error'] = 'error';
     LEVELS['60'] = LEVELS['fatal'] = 'fatal';
 
-    socket.on('logJSON', function(data) {
-        if (!data) {
-            return;
-        }
-        autoSpin();
-        log[LEVELS[data.level]](data);
-    });
-    socket.on('spinStart', function() {
-        spinStart();
-    });
-    socket.on('spinStop', function() {
-        spinStop();
-    });
-
-
-    var pageWrapper = document.getElementById('logger');
-    socket.on('connect', function() {
-        console.log('connected');
-        socket.emit('test');
-        pageWrapper.style.borderTop = 'none';
-    });
-
-    socket.on('disconnect', function() {
-        pageWrapper.style.borderTop = '5px solid red';
-    });
-
-    /*log4javascript.Level.TAG = new log4javascript.Level(70000, "TAG");
-     log4javascript.tag = function() {
-     this.log(this.Level.TAG, arguments);
-     };*/
     var log = log4javascript.getLogger('main');
     log.setLevel(log4javascript.Level.TRACE);
     var appender = new log4javascript.InPageAppender('logger', false, false, true, '100%', '100%');
     appender.setMaxMessages(5000);
     var layout = new log4javascript.JsonLayout();
     appender.setLayout(layout);
-    /*layout.format = function() {
-     debugger;
-     }*/
     var consoleWin = null;
     appender.addEventListener('load', function() {
         consoleWin = appender.getConsoleWindow();
@@ -110,7 +125,7 @@ jQuery(document).ready(function() {
         function setSearchMarkers(content) {
             var regexp = new RegExp('(' + consoleWin.currentSearch.searchTerm + ')', 'gi');
             for (var prop in content) {
-                if (content.hasOwnProperty(prop) && typeof content[prop] == 'string') {
+                if (content.hasOwnProperty(prop) && typeof content[prop] === 'string') {
                     content[prop] = content[prop].replace(regexp, '<span class=\'searchterm\'>$1</span>');
                 }
             }
@@ -120,13 +135,13 @@ jQuery(document).ready(function() {
             var str = '';
             for (var i = 0; i < hex.length; i += 2) {
                 var code = parseInt(hex.substr(i, 2), 16);
-                if (code === 9) {code = 8594} else
-                if (code === 10) {code = 8595} else
-                if (code === 13) {code = 8629} else
-                if (code === 15) {code = 9788} else
-                if (code === 27) {code = 8592} else
-                if (code === 28) {code = 8286} else
-                if (code < 32) {code = 32}
+                if (code === 9) { code = 8594; } else
+                if (code === 10) { code = 8595; } else
+                if (code === 13) { code = 8629; } else
+                if (code === 15) { code = 9788; } else
+                if (code === 27) { code = 8592; } else
+                if (code === 28) { code = 8286; } else
+                if (code < 32) { code = 32; }
                 str += String.fromCharCode(code);
             }
             if (str.length < 32) {
@@ -146,7 +161,7 @@ jQuery(document).ready(function() {
             if (typeof content !== 'object') {
                 content = JSON.parse(this.logEntry.formattedMessage);
             }
-            //var message = JSON.parse(content.message.replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t'));
+            // var message = JSON.parse(content.message.replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t'));
             var time = content.timestamp ? new Date(content.timestamp) : new Date();
             content.time = '' + time.getFullYear() +
             '-' + ('00' + (time.getMonth() + 1)).substr(-2) +
@@ -179,18 +194,19 @@ jQuery(document).ready(function() {
                     }
                 }
             }
-            if (content.mtid === 'frame'){
+            if (content.mtid === 'frame') {
                 try {
-                    var lines = [], asciiLines = [];
+                    var lines = [];
+                    var asciiLines = [];
                     var hex = content.message.message;
-                    if (typeof hex === 'string'){
+                    if (typeof hex === 'string') {
                         var ascii = hex2ascii(hex);
-                        for (var i=0; i<hex.length; i+=64){
-                            lines.push(hex.substr(i,64));
-                            asciiLines.push(ascii.substr(i/2,32));
+                        for (var i = 0; i < hex.length; i += 64) {
+                            lines.push(hex.substr(i, 64));
+                            asciiLines.push(ascii.substr(i / 2, 32));
                         }
                     } else {
-                        lines.push(JSON.stringify(hex, null,'  '));
+                        lines.push(JSON.stringify(hex, null, '  '));
                     }
                     content.message = '<span style="display: inline-block;" ondblclick="if (this.parentElement.className !==\'details\') {this.parentElement.className=\'details\'} else {this.parentElement.className=\'\'}">' +
                         asciiLines.join('\r\n') +
@@ -245,8 +261,6 @@ jQuery(document).ready(function() {
             this.mainDiv = document.createElement('tr');
             var customClasses = ' ';
             var msg = null;
-            var name = null;
-            var context = null;
             var className = null;
             function jssSet(name, value) {
                 if (!exists[name]) {
@@ -273,7 +287,7 @@ jQuery(document).ready(function() {
             } catch (e) {
                 customClasses = '';
             }
-            //customClasses += consoleWin.logEntries.length % 2 ? 'light ' : 'dark ';
+            // customClasses += consoleWin.logEntries.length % 2 ? 'light ' : 'dark ';
             this.mainDiv.className = 'logentry nonielogentry' + customClasses + logEntry.level;
             this.setContent(logEntry.formattedMessage);
         };
@@ -289,10 +303,10 @@ jQuery(document).ready(function() {
                 }
             }
             consoleWin.updateSearchFromFilters();
-        }
+        };
 
         consoleWin.toggleAllLevels = function toggleAllLevels() {
-            var turnOn = consoleWin.$("switch_ALL").checked;
+            var turnOn = consoleWin.$('switch_ALL').checked;
             for (var i = 0; i < consoleWin.logLevels.length; i++) {
                 consoleWin.getCheckBox(consoleWin.logLevels[i]).checked = turnOn;
                 if (turnOn) {
@@ -301,7 +315,7 @@ jQuery(document).ready(function() {
                     consoleWin.addClass(consoleWin.logMainContainer, consoleWin.logLevels[i]);
                 }
             }
-        }
+        };
 
         consoleWin.clearLog = function clearLog() {
             consoleWin.rootGroup.clear();
@@ -316,7 +330,7 @@ jQuery(document).ready(function() {
                     customToolbars[toolbar].clearOptions();
                 }
             }
-        }
+        };
         // @overrides above
 
         // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -336,9 +350,9 @@ jQuery(document).ready(function() {
             this.id = id;
             this.options = {};
             this.element = jQuery('<div id="toolbar_' + id + '" class="toolbar"></div>');
-            this.labelElement = jQuery('<span>' + (id.charAt(0).toUpperCase() + id.slice(1)) + ' :</span>')
+            this.labelElement = jQuery('<span>' + (id.charAt(0).toUpperCase() + id.slice(1)) + ' :</span>');
             this.optionsElement = jQuery('<span></span>');
-            this.allElement = jQuery('<input type="checkbox" id="' + this.id + '_ALL" checked="checked" title="Show/hide all messages" /><label for="' + this.id + '_ALL" id="' + this.id + '_label_ALL">all</label>')
+            this.allElement = jQuery('<input type="checkbox" id="' + this.id + '_ALL" checked="checked" title="Show/hide all messages" /><label for="' + this.id + '_ALL" id="' + this.id + '_label_ALL">all</label>');
             var self = this;
             this.allElement.click(function() {
                 self.toggleAllOptions();
@@ -406,8 +420,9 @@ jQuery(document).ready(function() {
             this.checkAllOptions();
         };
 
-        new CustomToolbar('name');
-        new CustomToolbar('context');
+        var ctnName = new CustomToolbar('name');
+        var ctnCtx = new CustomToolbar('context');
+        ctnName === ctnCtx;
 
         // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
         // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -427,11 +442,11 @@ jQuery(document).ready(function() {
         // @@@@@@@   prettify all   @@@@@@@@
         // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
         var prettifyContainer = jQuery('<span style="padding: 0 20px 0 0; display: inline-block"></span>');
-        var prettifyCheckbox =jQuery('<input type="checkbox" id="prettify_all" title="Prettify" >Prettify</input>');
+        var prettifyCheckbox = jQuery('<input type="checkbox" id="prettify_all" title="Prettify" >Prettify</input>');
         pluginsContainer.append(prettifyContainer.append(prettifyCheckbox));
         prettifyCheckbox.click(function(evt) {
             jss.set('div#log table tr td div span', {'white-space': this.checked ? 'pre' : 'inherit'});
-        })
+        });
         // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
         // @@@@@@@@   file upload   @@@@@@@@
         // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -445,9 +460,9 @@ jQuery(document).ready(function() {
         uploadFormFile.change(function(evt) {
             file = this.files[0];
             // maybe add validation
-            //var name = file.name;
-            //var size = file.size;
-            //var type = file.type;
+            // var name = file.name;
+            // var size = file.size;
+            // var type = file.type;
         });
         uploadFormSubmit.click(function(evt) {
             if (!file) { return; }
@@ -465,7 +480,7 @@ jQuery(document).ready(function() {
         // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
         // @@@@@@@@  logs querying  @@@@@@@@
         // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        var inputStyle = ' style="padding-left: 3px; font-size: 100%; margin-right: 5px; width: 90px; font-family: tahoma, verdana, arial, helvetica, sans-serif;" '
+        var inputStyle = ' style="padding-left: 3px; font-size: 100%; margin-right: 5px; width: 90px; font-family: tahoma, verdana, arial, helvetica, sans-serif;" ';
         var queryForm = jQuery('<form style="display: inline-block; padding-left: 20px; margin-left: 20px; border-left: 1px solid grey"></form>');
         var queryFrom = jQuery('<input type="text"' + inputStyle + 'data-field="datetime" readonly="">');
         var queryTo = jQuery('<input type="text"' + inputStyle + 'data-field="datetime" readonly="">');
