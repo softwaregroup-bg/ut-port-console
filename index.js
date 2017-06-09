@@ -182,12 +182,12 @@ Console.prototype.start = function ConsoleStart() {
         });
     });
 
-    this.utWss = new UtWss({log: this.log}, this.config);
-    this.utWss.on('connection', () => {
+    this.utWss = new UtWss({log: this.log, config: this.config});
+    this.utWss.start(this.httpServer.listener);
+    this.utWss.wss.on('connection', () => {
         self.browserConnected = true;
         self.emit('logJSON', '');
     });
-    this.utWss.start(this.httpServer.listener);
     this.utWss.registerPath('/status');
 
     this.httpServer.start(function() {
