@@ -1,3 +1,13 @@
+<a name="6.3.3"></a>
+## [6.3.3](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.3.0...v6.3.3) (2017-06-09)
+
+
+### Bug Fixes
+
+* ut-port-httpserver version corrected ([#7](https://github.com/softwaregroup-bg/ut-port-console/issues/7)) ([4d9ff39](https://github.com/softwaregroup-bg/ut-port-console/commit/4d9ff39))
+
+
+
 <a name="6.3.2"></a>
 ## [6.3.2](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.3.0...v6.3.2) (2017-06-09)
 
