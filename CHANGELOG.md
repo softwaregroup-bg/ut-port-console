@@ -1,3 +1,13 @@
+<a name="6.3.4"></a>
+## [6.3.4](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.3.3...v6.3.4) (2017-06-13)
+
+
+### Bug Fixes
+
+* correct cookie name ([815a2e2](https://github.com/softwaregroup-bg/ut-port-console/commit/815a2e2))
+
+
+
 <a name="6.3.3"></a>
 ## [6.3.3](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.3.0...v6.3.3) (2017-06-09)
 
