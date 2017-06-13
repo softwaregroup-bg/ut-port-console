@@ -113,7 +113,7 @@ Console.prototype.start = function ConsoleStart() {
         handler: (req, reply) => {
             var config = {
                 ssoAuthUrl: this.config.ssoAuthUrl,
-                xsrfToken: (req.state && req.state['x-xsrf-token'])
+                xsrfToken: (req.state && req.state['xsrf-token'])
             };
             reply(`var config = ${JSON.stringify(config)}`);
         }
@@ -136,7 +136,7 @@ Console.prototype.start = function ConsoleStart() {
                             cookieConf
                         )
                         .state(
-                            'x-xsrf-token',
+                            'xsrf-token',
                             decoded.xsrfToken,
                             cookieConf
                         );
