@@ -1,3 +1,13 @@
+<a name="6.3.5"></a>
+## [6.3.5](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.3.4...v6.3.5) (2017-06-29)
+
+
+### Bug Fixes
+
+* ws version bump ([d1884b4](https://github.com/softwaregroup-bg/ut-port-console/commit/d1884b4))
+
+
+
 <a name="6.3.4"></a>
 ## [6.3.4](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.3.3...v6.3.4) (2017-06-13)
 
