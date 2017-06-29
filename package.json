@@ -10,11 +10,11 @@
     "lodash.merge": "4.6.0",
     "lodash.assign": "4.2.0",
     "jsonwebtoken": "7.4.1",
-    "socket.io": "2.0.3",
+    "socket.io": "1.7.4",
     "ut-port-httpserver": "^8.12.1-ws.0"
   },
   "devDependencies": {
-    "socket.io-client": "2.0.3",
+    "socket.io-client": "1.7.4",
     "ut-tools": "^5.17.26"
   },
   "peerDependencies": {
