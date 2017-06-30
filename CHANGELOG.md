@@ -1,3 +1,13 @@
+<a name="6.3.7"></a>
+## [6.3.7](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.3.4...v6.3.7) (2017-06-30)
+
+
+### Bug Fixes
+
+* ws upgrade ([dd12453](https://github.com/softwaregroup-bg/ut-port-console/commit/dd12453))
+
+
+
 <a name="6.3.4"></a>
 ## [6.3.4](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.3.3...v6.3.4) (2017-06-13)
 
