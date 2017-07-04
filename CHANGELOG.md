@@ -1,3 +1,13 @@
+<a name="6.3.8"></a>
+## [6.3.8](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.3.7...v6.3.8) (2017-07-04)
+
+
+### Bug Fixes
+
+* return response so cookie can be set, added popup window instead aut oredirect for credentials enter in ([0f88096](https://github.com/softwaregroup-bg/ut-port-console/commit/0f88096))
+
+
+
 <a name="6.3.7"></a>
 ## [6.3.7](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.3.4...v6.3.7) (2017-06-30)
 
