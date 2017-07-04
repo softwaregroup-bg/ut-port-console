@@ -1,10 +1,13 @@
 /* global URL,Blob,FormData,jQuery,Spinner,log4javascript,btoa,config */
 
 function pendingAuthorization(closeCode) {
-    if (closeCode === 401) {
+    if (closeCode === 401 || closeCode === 403) {
         if (config.ssoAuthUrl) {
             setTimeout(() => {
-                window.location = `${config.ssoAuthUrl}${btoa(window.location.href)}`;
+                var location = `${config.ssoAuthUrl}${btoa(window.location.href)}`;
+                if (!jQuery('#loginInfo').length) {
+                    jQuery('body').append(jQuery('<div/>').attr('id', 'loginInfo').attr('title', closeCode).css({position: 'absolute', top: '50%', left: '50%', 'z-index': 10, background: '#ccc', padding: '10px', 'text-align': 'center'}).append('<span>Not Logged in</span>').append('<br />').append(jQuery('<a>click here to login</a>').attr('href', location)));
+                }
             }, 2000);
             return true;
         }
