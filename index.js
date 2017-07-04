@@ -129,7 +129,7 @@ Console.prototype.start = function ConsoleStart() {
                     if (err) {
                         reply(Boom.unauthorized());
                     } else {
-                        reply('')
+                        reply('OK')
                         .state(
                             req.payload.cookie.name,
                             req.payload.cookie.value,
