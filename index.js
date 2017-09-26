@@ -187,8 +187,9 @@ Console.prototype.start = function ConsoleStart() {
         self.browserConnected = true;
         self.emit('logJSON', '');
     });
-    this.utWss.start(this.httpServer.listener);
     this.utWss.registerPath('/status');
+    this.utWss.ignorePath('/socket.io/');
+    this.utWss.start(this.httpServer.listener);
 
     this.httpServer.start(function() {
         self.log.info && self.log.info('go to: ' + self.httpServer.info.uri + ' to access the debug console');
