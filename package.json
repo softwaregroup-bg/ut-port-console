@@ -1,6 +1,6 @@
 {
   "name": "ut-port-console",
-  "version": "6.4.0-rc.0",
+  "version": "6.4.0-rc.1",
   "dependencies": {
     "hapi": "16.0.2",
     "inert": "4.0.4",
