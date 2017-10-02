@@ -1,3 +1,13 @@
+<a name="6.4.0"></a>
+# [6.4.0](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.3.8...v6.4.0) (2017-10-02)
+
+
+### Bug Fixes
+
+* remove socket.io ([#13](https://github.com/softwaregroup-bg/ut-port-console/issues/13)) ([963d9ac](https://github.com/softwaregroup-bg/ut-port-console/commit/963d9ac))
+
+
+
 <a name="6.3.8"></a>
 ## [6.3.8](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.3.7...v6.3.8) (2017-07-04)
 
