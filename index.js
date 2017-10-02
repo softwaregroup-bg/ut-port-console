@@ -1,13 +1,13 @@
 const Port = require('ut-bus/port');
 const Path = require('path');
 const util = require('util');
-const io = require('socket.io');
 const Hapi = require('hapi');
 const Inert = require('inert');
-const JSONStream = require('JSONStream');
 const UtWss = require('ut-port-httpserver/socketServer');
 const jwt = require('jsonwebtoken');
 const Boom = require('boom');
+const dgram = require('dgram');
+var ndjson = require('ndjson');
 var merge = require('lodash.merge');
 const _undefined = undefined;
 
@@ -15,8 +15,11 @@ function Console(config) {
     Port.apply(this, arguments);
     this.config = merge({
         id: 'debug_console',
+        exclusive: true,
+        host: 'localhost',
+        port: 30001,
         server: {
-            host: '127.0.0.1',
+            host: 'localhost',
             port: 30001,
             state: {
                 strictHeader: false
@@ -157,8 +160,7 @@ Console.prototype.start = function ConsoleStart() {
                 parse: true
             },
             handler: function(request, reply) {
-                request.payload.files.pipe(JSONStream.parse('*')).on('data', function(log) {
-                    // self.console.emit(log.timestamp ? 'logMessage' : 'logJSON', log);
+                request.payload.files.pipe(ndjson.parse('*')).on('data', function(log) {
                     self.emit('logJSON', log);
                 });
                 return reply('');
@@ -175,11 +177,20 @@ Console.prototype.start = function ConsoleStart() {
         }
     });
 
-    this.socket = io(this.httpServer.listener);
-    this.socket.of('/log').on('connection', function(socket) {
-        socket.on('log', function(msg) {
-            self.emit('logJSON', msg);
-        });
+    this.ldstream = ndjson.parse();
+    this.ldstream.on('data', msg => this.emit('logJSON', msg));
+
+    this.socket = dgram.createSocket('udp4');
+    this.socket.on('message', (msg, rinfo) => {
+        this.ldstream.write(msg);
+    });
+    this.socket.on('close', () => {
+        this.ldstream = _undefined;
+    });
+    this.socket.bind({
+        address: this.config.host,
+        port: this.config.port,
+        exclusive: this.config.exclusive
     });
 
     this.utWss = new UtWss({log: this.log}, this.config);
@@ -187,8 +198,8 @@ Console.prototype.start = function ConsoleStart() {
         self.browserConnected = true;
         self.emit('logJSON', '');
     });
-    this.utWss.start(this.httpServer.listener);
     this.utWss.registerPath('/status');
+    this.utWss.start(this.httpServer.listener);
 
     this.httpServer.start(function() {
         self.log.info && self.log.info('go to: ' + self.httpServer.info.uri + ' to access the debug console');
@@ -212,7 +223,7 @@ Console.prototype.emit = function emit(type, msg) {
 Console.prototype.stop = function ConsoleStop() {
     Port.prototype.stop.apply(this, arguments);
     // cleanup
-    this.socket.close('Console socket closed');
+    this.socket.close();
     this.httpServer.stop();
     if (this.db && this.db.close) {
         this.db.close();
