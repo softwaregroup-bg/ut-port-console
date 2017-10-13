@@ -210,7 +210,7 @@ module.exports = function(Parent) {
             stream.write(msg.slice(16));
         });
         this.socket.on('close', () => {
-            this.cache.prune();
+            this.cache.reset();
         });
         this.socket.bind({
             address: this.config.host,
