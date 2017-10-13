@@ -200,7 +200,6 @@ module.exports = function(Parent) {
             let stream = this.cache.get(id) || createStream(id);
             stream.mapper = msg => {
                 try {
-                    msg.length > 500 && (msg = '*');
                     return JSON.parse(msg);
                 } catch (e) {
                     this.cache.del(id);
