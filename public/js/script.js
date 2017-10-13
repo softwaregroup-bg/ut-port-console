@@ -176,6 +176,7 @@ jQuery(document).ready(function() {
             content.context = '';
             content.opcode = '';
             content.mtid = '';
+            content.service = '';
             if (content.message) {
                 if (content.message.name) {
                     content.sender = content.message.name;
@@ -196,6 +197,7 @@ jQuery(document).ready(function() {
                         content.mtid = content.message.message.pop().mtid || '';
                     }
                 }
+                content.service = content.message.service;
             }
             if (content.mtid === 'frame') {
                 try {
@@ -242,6 +244,7 @@ jQuery(document).ready(function() {
             element.style.whiteSpace = 'nowrap';
             this.mainDiv.appendChild(element).innerHTML = content.time;
             this.mainDiv.appendChild(document.createElement('td')).innerHTML = content.level;
+            this.mainDiv.appendChild(document.createElement('td')).innerHTML = content.service;
             this.mainDiv.appendChild(document.createElement('td')).innerHTML = content.sender;
             this.mainDiv.appendChild(document.createElement('td')).innerHTML = content.context;
             this.mainDiv.appendChild(document.createElement('td')).innerHTML = content.mtid;
