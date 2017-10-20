@@ -11,9 +11,9 @@ var merge = require('lodash.merge');
 const _undefined = undefined;
 const cache = require('lru-cache');
 
-module.exports = function(Parent) {
+module.exports = function({parent}) {
     function ConsolePort({config}) {
-        Parent && Parent.apply(this, arguments);
+        parent && parent.apply(this, arguments);
         this.config = merge({
             id: 'console',
             type: 'console',
@@ -64,12 +64,12 @@ module.exports = function(Parent) {
         this.browserConnected = false;
     }
 
-    if (Parent) {
-        util.inherits(ConsolePort, Parent);
+    if (parent) {
+        util.inherits(ConsolePort, parent);
     }
 
     ConsolePort.prototype.init = function ConsoleInit() {
-        Parent && Parent.prototype.init.apply(this, arguments);
+        parent && parent.prototype.init.apply(this, arguments);
     };
 
     ConsolePort.prototype.readFromDB = function readFromDB(criteria) {
@@ -94,7 +94,7 @@ module.exports = function(Parent) {
     };
 
     ConsolePort.prototype.start = function ConsoleStart() {
-        Parent && Parent.prototype.start.apply(this, arguments);
+        parent && parent.prototype.start.apply(this, arguments);
         var self = this;
         this.httpServer = new Hapi.Server();
         this.httpServer.register(Inert, function() {});
@@ -252,7 +252,7 @@ module.exports = function(Parent) {
     };
 
     ConsolePort.prototype.stop = function ConsoleStop() {
-        Parent && Parent.prototype.stop.apply(this, arguments);
+        parent && parent.prototype.stop.apply(this, arguments);
         // cleanup
         this.socket.close();
         this.httpServer.stop();
