@@ -10,10 +10,10 @@
     "lru-cache": "4.1.1",
     "jsonwebtoken": "7.4.1",
     "split2": "2.2.0",
-    "ut-port-httpserver": "^8.12.1"
+    "ut-port-httpserver": "v9.0.0-ut6.6"
   },
   "devDependencies": {
-    "ut-tools": "^5.17.26"
+    "ut-tools": "^5.29.12"
   },
   "description": "UT port console module",
   "scripts": {
