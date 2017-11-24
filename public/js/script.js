@@ -165,7 +165,7 @@ jQuery(document).ready(function() {
                 content = JSON.parse(this.logEntry.formattedMessage);
             }
             // var message = JSON.parse(content.message.replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t'));
-            var time = content.timestamp ? new Date(content.timestamp) : new Date();
+            var time = (content.message && content.message.time) ? new Date(content.message.time) : new Date();
             content.time = '' + time.getFullYear() +
             '-' + ('00' + (time.getMonth() + 1)).substr(-2) +
             '-' + ('00' + time.getDate()).substr(-2) +
