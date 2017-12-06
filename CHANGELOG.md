@@ -1,3 +1,13 @@
+<a name="7.0.0"></a>
+# [7.0.0](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.4.0...v7.0.0) (2017-12-06)
+
+
+### Bug Fixes
+
+* upgrade and bugfix ([96224d8](https://github.com/softwaregroup-bg/ut-port-console/commit/96224d8))
+
+
+
 <a name="6.4.0"></a>
 # [6.4.0](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.3.8...v6.4.0) (2017-10-02)
 
