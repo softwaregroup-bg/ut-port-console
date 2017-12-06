@@ -165,7 +165,7 @@ jQuery(document).ready(function() {
                 content = JSON.parse(this.logEntry.formattedMessage);
             }
             // var message = JSON.parse(content.message.replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t'));
-            var time = content.timestamp ? new Date(content.timestamp) : new Date();
+            var time = (content.message && content.message.time) ? new Date(content.message.time) : new Date();
             content.time = '' + time.getFullYear() +
             '-' + ('00' + (time.getMonth() + 1)).substr(-2) +
             '-' + ('00' + time.getDate()).substr(-2) +
@@ -176,6 +176,7 @@ jQuery(document).ready(function() {
             content.context = '';
             content.opcode = '';
             content.mtid = '';
+            content.service = '';
             if (content.message) {
                 if (content.message.name) {
                     content.sender = content.message.name;
@@ -196,6 +197,7 @@ jQuery(document).ready(function() {
                         content.mtid = content.message.message.pop().mtid || '';
                     }
                 }
+                content.service = content.message.service;
             }
             if (content.mtid === 'frame') {
                 try {
@@ -242,6 +244,7 @@ jQuery(document).ready(function() {
             element.style.whiteSpace = 'nowrap';
             this.mainDiv.appendChild(element).innerHTML = content.time;
             this.mainDiv.appendChild(document.createElement('td')).innerHTML = content.level;
+            this.mainDiv.appendChild(document.createElement('td')).innerHTML = content.service;
             this.mainDiv.appendChild(document.createElement('td')).innerHTML = content.sender;
             this.mainDiv.appendChild(document.createElement('td')).innerHTML = content.context;
             this.mainDiv.appendChild(document.createElement('td')).innerHTML = content.mtid;

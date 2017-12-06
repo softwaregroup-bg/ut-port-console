@@ -1,22 +1,19 @@
 {
   "name": "ut-port-console",
-  "version": "6.4.0",
+  "version": "7.0.0-ut6.2",
   "dependencies": {
     "hapi": "16.0.2",
     "inert": "4.0.4",
     "boom": "5.1.0",
     "lodash.merge": "4.6.0",
     "lodash.assign": "4.2.0",
+    "lru-cache": "4.1.1",
     "jsonwebtoken": "7.4.1",
-    "ndjson": "1.5.0",
-    "ut-port-httpserver": "^8.12.1"
+    "split2": "2.2.0",
+    "ut-port-httpserver": "9.0.0"
   },
   "devDependencies": {
-    "socket.io-client": "2.0.3",
-    "ut-tools": "^5.17.26"
-  },
-  "peerDependencies": {
-    "ut-bus": "^5.12.1"
+    "ut-tools": "^5.29.12"
   },
   "description": "UT port console module",
   "scripts": {
