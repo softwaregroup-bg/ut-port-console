@@ -1,3 +1,13 @@
+<a name="7.0.1"></a>
+## [7.0.1](https://github.com/softwaregroup-bg/ut-port-console/compare/v7.0.0...v7.0.1) (2017-12-14)
+
+
+### Bug Fixes
+
+* make warning more visible ([55454fd](https://github.com/softwaregroup-bg/ut-port-console/commit/55454fd))
+
+
+
 <a name="7.0.0"></a>
 # [7.0.0](https://github.com/softwaregroup-bg/ut-port-console/compare/v6.4.0...v7.0.0) (2017-12-06)
 
