@@ -4556,7 +4556,7 @@
                 '           }',
                 '',
                 '           div#log *.WARN, label#label_WARN {',
-                '               color: #999900;',
+                '               color: orangered;',
                 '           }',
                 '',
                 '           div#log *.ERROR, label#label_ERROR {',
