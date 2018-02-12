@@ -93,12 +93,11 @@ module.exports = function({parent}) {
         });
     };
 
-    ConsolePort.prototype.start = function ConsoleStart() {
+    ConsolePort.prototype.start = async function ConsoleStart() {
         parent && parent.prototype.start.apply(this, arguments);
         var self = this;
-        this.httpServer = new Hapi.Server();
-        this.httpServer.register(Inert, function() {});
-        this.httpServer.connection(this.config.server);
+        this.httpServer = new Hapi.Server(this.config.server);
+        await this.httpServer.register(Inert);
         this.httpServer.route({
             method: 'GET',
             path: '/{p*}',
@@ -122,12 +121,12 @@ module.exports = function({parent}) {
             method: 'GET',
             path: '/js/config.js',
             config: {auth: false},
-            handler: (req, reply) => {
+            handler: (req, h) => {
                 var config = {
                     ssoAuthUrl: this.config.ssoAuthUrl,
                     xsrfToken: (req.state && req.state['xsrf-token'])
                 };
-                reply(`var config = ${JSON.stringify(config)}`);
+                return h.response(`var config = ${JSON.stringify(config)}`);
             }
         });
         this.httpServer.route({
