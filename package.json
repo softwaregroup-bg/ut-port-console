@@ -1,19 +1,25 @@
 {
   "name": "ut-port-console",
-  "version": "7.0.1",
+  "version": "8.0.0-rc-cubalibre.2",
+  "pkg": {
+    "assets": [
+      "public/**/*"
+    ]
+  },
   "dependencies": {
-    "hapi": "16.0.2",
-    "inert": "4.0.4",
-    "boom": "5.1.0",
+    "hapi": "17.2.0",
+    "inert": "5.1.0",
+    "boom": "7.1.1",
     "lodash.merge": "4.6.0",
-    "lodash.assign": "4.2.0",
     "lru-cache": "4.1.1",
-    "jsonwebtoken": "7.4.1",
-    "split2": "2.2.0",
-    "ut-port-httpserver": "9.0.0"
+    "jsonwebtoken": "8.1.1",
+    "split2": "2.2.0"
   },
   "devDependencies": {
-    "ut-tools": "^5.29.12"
+    "ut-tools": "^5.32.5"
+  },
+  "peerDependencies": {
+    "ut-port-httpserver": "^10.0.0-rc-cubalibre.3"
   },
   "description": "UT port console module",
   "scripts": {
@@ -29,6 +35,7 @@
     "prepublish": "ut-prepublish",
     "prepush": "ut-prepush",
     "pretest": "ut-pretest",
+    "precover": "ut-precover",
     "preversion": "ut-preversion",
     "test": "ut-test",
     "version": "ut-version",
