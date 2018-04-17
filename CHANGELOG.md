@@ -1,3 +1,13 @@
+<a name="8.0.0"></a>
+# [8.0.0](https://github.com/softwaregroup-bg/ut-port-console/compare/v7.0.1...v8.0.0) (2018-04-17)
+
+
+### Bug Fixes
+
+* upgrade hapi ([adecd2c](https://github.com/softwaregroup-bg/ut-port-console/commit/adecd2c))
+
+
+
 <a name="7.0.1"></a>
 ## [7.0.1](https://github.com/softwaregroup-bg/ut-port-console/compare/v7.0.0...v7.0.1) (2017-12-14)
 

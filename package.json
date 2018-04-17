@@ -1,6 +1,6 @@
 {
   "name": "ut-port-console",
-  "version": "8.0.0-rc-cubalibre.2",
+  "version": "8.0.0",
   "pkg": {
     "assets": [
       "public/**/*"
