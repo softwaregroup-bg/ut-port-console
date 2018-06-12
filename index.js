@@ -2,19 +2,18 @@ const Path = require('path');
 const util = require('util');
 const Hapi = require('hapi');
 const Inert = require('inert');
-const UtWss = require('ut-port-httpserver/socketServer');
+const UtWss = require('ut-wss');
 const jwt = require('jsonwebtoken');
 const Boom = require('boom');
 const dgram = require('dgram');
 var split2 = require('split2');
-var merge = require('lodash.merge');
 const _undefined = undefined;
 const cache = require('lru-cache');
 
 module.exports = function({parent}) {
     function ConsolePort({config}) {
         parent && parent.apply(this, arguments);
-        this.config = merge({
+        this.config = this.merge({
             id: 'console',
             type: 'console',
             exclusive: true,
