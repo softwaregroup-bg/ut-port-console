@@ -1,3 +1,13 @@
+<a name="8.1.0"></a>
+# [8.1.0](https://github.com/softwaregroup-bg/ut-port-console/compare/v8.0.0...v8.1.0) (2018-08-02)
+
+
+### Bug Fixes
+
+* use ut-wss instead of ut-port-httpserver/socketServer ([#16](https://github.com/softwaregroup-bg/ut-port-console/issues/16)) ([c5e5933](https://github.com/softwaregroup-bg/ut-port-console/commit/c5e5933))
+
+
+
 <a name="8.0.0"></a>
 # [8.0.0](https://github.com/softwaregroup-bg/ut-port-console/compare/v7.0.1...v8.0.0) (2018-04-17)
 
