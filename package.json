@@ -1,6 +1,6 @@
 {
   "name": "ut-port-console",
-  "version": "8.0.0",
+  "version": "8.1.0-rc-einstein.0",
   "pkg": {
     "assets": [
       "public/**/*"
@@ -8,9 +8,9 @@
   },
   "dependencies": {
     "hapi": "17.2.0",
+    "ut-wss": "0.1.1",
     "inert": "5.1.0",
     "boom": "7.1.1",
-    "lodash.merge": "4.6.0",
     "lru-cache": "4.1.1",
     "jsonwebtoken": "8.1.1",
     "split2": "2.2.0"
