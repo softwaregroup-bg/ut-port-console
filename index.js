@@ -211,7 +211,7 @@ module.exports = function({parent}) {
             this.cache.reset();
         });
         this.socket.bind({
-            address: this.config.host,
+            address: this.config.address,
             port: this.config.port,
             exclusive: this.config.exclusive
         });
