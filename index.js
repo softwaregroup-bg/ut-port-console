@@ -99,6 +99,14 @@ module.exports = function({parent}) {
         await this.httpServer.register(Inert);
         this.httpServer.route({
             method: 'GET',
+            path: '/health',
+            options: {
+                auth: false,
+                handler: (request, h) => ((this.isReady && 'ok') || h.response('service not available').code(503))
+            }
+        });
+        this.httpServer.route({
+            method: 'GET',
             path: '/{p*}',
             handler: {
                 directory: {
