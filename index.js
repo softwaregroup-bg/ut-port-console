@@ -194,25 +194,49 @@ module.exports = function({parent}) {
 
         this.cache = cache(this.config.cache);
 
-        let createStream = id => {
+        let logError = (error, data) => this.emit('logJSON', {
+            error: {
+                message: error.message,
+                type: 'split2.error'
+            },
+            name: this.config.id,
+            context: 'console port',
+            service: this.bus.config.service,
+            level: 'error',
+            $meta: {
+                mtid: 'error',
+                method: 'split2.write'
+            },
+            msg: data && data.substr && data.substr(0, 256)
+        });
+
+        let createStream = (id, rinfo) => {
             let result = split2(/\n/, JSON.parse, {maxLength: this.config.maxLength});
             this.cache.set(id, result);
             result.on('data', msg => this.emit('logJSON', msg));
+            result.mapper = msg => {
+                try {
+                    return JSON.parse(msg);
+                } catch (error) {
+                    logError(error, msg);
+                    result.destroy();
+                    return null;
+                }
+            };
+            result.on('error', error => {
+                logError(error, result._last);
+                result.destroy();
+            });
+            result.on('close', () => {
+                this.cache.del(id);
+                this.socket.send(JSON.stringify({method: 'uuid'}), rinfo.port, rinfo.address); // notify sender to generate new stream id
+            });
             return result;
         };
         this.socket = dgram.createSocket('udp4');
         this.socket.on('message', (msg, rinfo) => {
             let id = msg.slice(0, 16).toString('hex');
-            let stream = this.cache.get(id) || createStream(id);
-            stream.mapper = msg => {
-                try {
-                    return JSON.parse(msg);
-                } catch (e) {
-                    this.cache.del(id);
-                    this.socket.send(JSON.stringify({method: 'uuid'}), rinfo.port, rinfo.address); // notify sender to generate new stream id
-                    return null;
-                }
-            };
+            let stream = this.cache.get(id) || createStream(id, rinfo);
             stream.write(msg.slice(16));
         });
         this.socket.on('close', () => {
