@@ -1,6 +1,6 @@
 {
   "name": "ut-port-console",
-  "version": "8.2.0-rc-godfather.5",
+  "version": "8.2.0-rc-godfather.6",
   "pkg": {
     "assets": [
       "public/**/*"
