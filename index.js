@@ -148,16 +148,16 @@ module.exports = function({parent}) {
                             reply(Boom.unauthorized());
                         } else {
                             reply('OK')
-                            .state(
-                                req.payload.cookie.name,
-                                req.payload.cookie.value,
-                                cookieConf
-                            )
-                            .state(
-                                'xsrf-token',
-                                decoded.xsrfToken,
-                                cookieConf
-                            );
+                                .state(
+                                    req.payload.cookie.name,
+                                    req.payload.cookie.value,
+                                    cookieConf
+                                )
+                                .state(
+                                    'xsrf-token',
+                                    decoded.xsrfToken,
+                                    cookieConf
+                                );
                         }
                     });
                 } else {
