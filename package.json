@@ -16,10 +16,10 @@
     "split2": "2.2.0"
   },
   "devDependencies": {
-    "ut-tools": "^5.32.5"
+    "ut-tools": "^6.3.4"
   },
   "peerDependencies": {
-    "ut-port-httpserver": "^10.0.0-rc-cubalibre.3"
+    "ut-port-httpserver": "^10.3.0"
   },
   "description": "UT port console module",
   "scripts": {
