@@ -14,7 +14,7 @@ module.exports = function({parent}) {
     function ConsolePort({config}) {
         parent && parent.apply(this, arguments);
         this.config = this.merge({
-            id: 'console',
+            id: 'utPortConsole',
             type: 'console',
             exclusive: true,
             host: 'localhost',
