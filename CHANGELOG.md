@@ -1,3 +1,27 @@
+# [8.2.0](https://github.com/softwaregroup-bg/ut-port-console/compare/v8.1.0...v8.2.0) (2019-02-02)
+
+
+### Bug Fixes
+
+* dependencies ([a114fa8](https://github.com/softwaregroup-bg/ut-port-console/commit/a114fa8))
+* dependency ([8ce4661](https://github.com/softwaregroup-bg/ut-port-console/commit/8ce4661))
+* dependency ([75c5426](https://github.com/softwaregroup-bg/ut-port-console/commit/75c5426))
+* dependency ([2695c4e](https://github.com/softwaregroup-bg/ut-port-console/commit/2695c4e))
+* log errors of large or unparseable lines ([c555e2d](https://github.com/softwaregroup-bg/ut-port-console/commit/c555e2d))
+* rename ([f401393](https://github.com/softwaregroup-bg/ut-port-console/commit/f401393))
+* typo ([4258d19](https://github.com/softwaregroup-bg/ut-port-console/commit/4258d19))
+* upgrade dependencies ([a894c51](https://github.com/softwaregroup-bg/ut-port-console/commit/a894c51))
+* upgrade ut-tools ([79d0a02](https://github.com/softwaregroup-bg/ut-port-console/commit/79d0a02))
+* use /healthz per convention ([ab5b6b1](https://github.com/softwaregroup-bg/ut-port-console/commit/ab5b6b1))
+* use address when binding, host is for connecting ([76be940](https://github.com/softwaregroup-bg/ut-port-console/commit/76be940))
+
+
+### Features
+
+* add health check handler ([e91cd94](https://github.com/softwaregroup-bg/ut-port-console/commit/e91cd94))
+
+
+
 <a name="8.1.0"></a>
 # [8.1.0](https://github.com/softwaregroup-bg/ut-port-console/compare/v8.0.0...v8.1.0) (2018-08-02)
 
