@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "hapi": "17.6.0",
-    "ut-wss": ">=0.2.0-rc-godfather.1 <=0.2.0-rc-godfather.999",
+    "ut-wss": ">=0.2.0",
     "inert": "5.1.0",
     "boom": "7.2.0",
     "lru-cache": "4.1.1",
@@ -16,10 +16,7 @@
     "split2": "2.2.0"
   },
   "devDependencies": {
-    "ut-tools": "^6.3.4"
-  },
-  "peerDependencies": {
-    "ut-port-httpserver": "^10.3.0"
+    "ut-tools": "^6.8.10"
   },
   "description": "UT port console module",
   "scripts": {
