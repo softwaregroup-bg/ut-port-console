@@ -16,6 +16,7 @@
     "split2": "2.2.0"
   },
   "devDependencies": {
+    "tap": "^12.5.2",
     "ut-tools": "^6.8.10"
   },
   "description": "UT port console module",
