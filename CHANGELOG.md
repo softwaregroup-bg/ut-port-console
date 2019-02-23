@@ -1,3 +1,12 @@
+## [8.2.2](https://github.com/softwaregroup-bg/ut-port-console/compare/v8.2.1...v8.2.2) (2019-02-23)
+
+
+### Bug Fixes
+
+* update jsonwebtoken ([0e92c5f](https://github.com/softwaregroup-bg/ut-port-console/commit/0e92c5f))
+
+
+
 ## [8.2.1](https://github.com/softwaregroup-bg/ut-port-console/compare/v8.2.0...v8.2.1) (2019-02-14)
 
 
