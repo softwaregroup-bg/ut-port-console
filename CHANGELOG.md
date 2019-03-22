@@ -1,3 +1,7 @@
+## [8.2.3](https://github.com/softwaregroup-bg/ut-port-console/compare/v8.2.2...v8.2.3) (2019-03-22)
+
+
+
 ## [8.2.2](https://github.com/softwaregroup-bg/ut-port-console/compare/v8.2.1...v8.2.2) (2019-02-23)
 
 
