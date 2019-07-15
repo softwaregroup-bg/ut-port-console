@@ -1,3 +1,17 @@
+# [9.0.0](https://github.com/softwaregroup-bg/ut-port-console/compare/v8.2.3...v9.0.0) (2019-07-15)
+
+
+### Features
+
+* expose k8s config ([32aeda2](https://github.com/softwaregroup-bg/ut-port-console/commit/32aeda2))
+
+
+### BREAKING CHANGES
+
+* use address in configuration, instead of host for listening
+
+
+
 ## [8.2.3](https://github.com/softwaregroup-bg/ut-port-console/compare/v8.2.2...v8.2.3) (2019-03-22)
 
 
