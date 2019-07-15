@@ -30,7 +30,7 @@ module.exports = function({utPort}) {
                 host: 'localhost',
                 port: 30001,
                 server: {
-                    host: 'localhost',
+                    address: 'localhost',
                     port: 30001,
                     state: {
                         strictHeader: false
@@ -63,6 +63,29 @@ module.exports = function({utPort}) {
                 },
                 maxLength: 16 * 1024
             };
+        }
+        async init() {
+            const result = await super.init(...arguments);
+            this.config.k8s = {
+                ports: [{
+                    name: 'http-ui',
+                    service: {
+                        clusterIP: 'None'
+                    },
+                    ingress: {
+                        host: this.config.server.host
+                    },
+                    containerPort: this.config.server.port
+                }, {
+                    name: 'udp-log',
+                    protocol: 'UDP',
+                    service: {
+                        clusterIP: 'None'
+                    },
+                    containerPort: this.config.port
+                }]
+            };
+            return result;
         }
         readFromDB(criteria) {
             if (!this.db) {
