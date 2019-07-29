@@ -1,3 +1,12 @@
+## [9.0.1](https://github.com/softwaregroup-bg/ut-port-console/compare/v9.0.0...v9.0.1) (2019-07-29)
+
+
+### Bug Fixes
+
+* check during stop ([eccae7e](https://github.com/softwaregroup-bg/ut-port-console/commit/eccae7e))
+
+
+
 # [9.0.0](https://github.com/softwaregroup-bg/ut-port-console/compare/v8.2.3...v9.0.0) (2019-07-15)
 
 
