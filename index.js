@@ -296,8 +296,8 @@ module.exports = function({utPort}) {
         }
         async stop() {
             // cleanup
-            this.socket.close();
-            this.httpServer.stop();
+            this.socket && this.socket.close();
+            this.httpServer && this.httpServer.stop();
             if (this.db && this.db.close) {
                 this.db.close();
                 this.db = _undefined;
