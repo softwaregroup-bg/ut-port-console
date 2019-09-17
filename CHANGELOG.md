@@ -1,3 +1,12 @@
+## [9.0.2](https://github.com/softwaregroup-bg/ut-port-console/compare/v9.0.1...v9.0.2) (2019-09-17)
+
+
+### Bug Fixes
+
+* align event logging ([b50a496](https://github.com/softwaregroup-bg/ut-port-console/commit/b50a496))
+
+
+
 ## [9.0.1](https://github.com/softwaregroup-bg/ut-port-console/compare/v9.0.0...v9.0.1) (2019-07-29)
 
 
