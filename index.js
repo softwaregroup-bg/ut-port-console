@@ -288,7 +288,7 @@ module.exports = function({utPort}) {
                 self.log.info && self.log.info({
                     $meta: {
                         mtid: 'event',
-                        opcode: `port.started`
+                        method: `port.started`
                     },
                     msg: 'go to: ' + self.httpServer.info.uri + ' to access the debug console'
                 });
