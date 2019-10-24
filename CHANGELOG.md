@@ -1,3 +1,12 @@
+# [9.1.0](https://github.com/softwaregroup-bg/ut-port-console/compare/v9.0.2...v9.1.0) (2019-10-24)
+
+
+### Features
+
+* upgrade hapi ([d01f792](https://github.com/softwaregroup-bg/ut-port-console/commit/d01f792))
+
+
+
 ## [9.0.2](https://github.com/softwaregroup-bg/ut-port-console/compare/v9.0.1...v9.0.2) (2019-09-17)
 
 
