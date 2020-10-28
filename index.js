@@ -5,7 +5,7 @@ const UtWss = require('ut-wss');
 const jwt = require('jsonwebtoken');
 const Boom = require('@hapi/boom');
 const dgram = require('dgram');
-var split2 = require('split2');
+const split2 = require('split2');
 const _undefined = undefined;
 const cache = require('lru-cache');
 
@@ -22,6 +22,7 @@ module.exports = function({utPort}) {
             this.queue = [];
             this.browserConnected = false;
         }
+
         get defaults() {
             return {
                 id: 'utPortConsole',
@@ -64,6 +65,7 @@ module.exports = function({utPort}) {
                 maxLength: 16 * 1024
             };
         }
+
         async init() {
             const result = await super.init(...arguments);
             this.config.k8s = {
@@ -87,11 +89,12 @@ module.exports = function({utPort}) {
             };
             return result;
         }
+
         readFromDB(criteria) {
             if (!this.db) {
                 return;
             }
-            var self = this;
+            const self = this;
             // this.console.emit('spinStart', '');
             this.db.createReadStream({
                 keys: false,
@@ -107,6 +110,7 @@ module.exports = function({utPort}) {
                 // self.console.emit('spinStop', '');
             });
         }
+
         emit(type, msg) {
             if (this.browserConnected) {
                 this.queue.push({type, msg});
@@ -120,9 +124,10 @@ module.exports = function({utPort}) {
                 this.queue.push({type, msg});
             }
         }
+
         async start() {
             await super.start(...arguments);
-            var self = this;
+            const self = this;
             this.httpServer = new Hapi.Server(this.config.server);
             await this.httpServer.register(Inert);
             this.httpServer.route({
@@ -157,7 +162,7 @@ module.exports = function({utPort}) {
                 path: '/js/config.js',
                 config: {auth: false},
                 handler: (req, h) => {
-                    var config = {
+                    const config = {
                         ssoAuthUrl: this.config.ssoAuthUrl,
                         xsrfToken: (req.state && req.state['xsrf-token'])
                     };
@@ -169,7 +174,7 @@ module.exports = function({utPort}) {
                 path: '/sso/client',
                 config: {auth: false},
                 handler: (req, reply) => {
-                    var cookieConf = Object.assign({}, this.config.cookie, {path: '/'});
+                    const cookieConf = Object.assign({}, this.config.cookie, {path: '/'});
                     if (req.payload && req.payload.cookie && req.payload.cookie.name && req.payload.cookie.value) {
                         jwt.verify(req.payload.cookie.value, this.config.jwt.key, Object.assign({}, this.config.jwt.verifyOptions, {ignoreExpiration: false}), (err, decoded) => {
                             if (err) {
@@ -222,7 +227,7 @@ module.exports = function({utPort}) {
 
             this.cache = cache(this.config.cache);
 
-            let logError = (error, data) => this.emit('logJSON', {
+            const logError = (error, data) => this.emit('logJSON', {
                 error: {
                     message: error.message,
                     type: 'split2.error'
@@ -238,8 +243,8 @@ module.exports = function({utPort}) {
                 msg: data && data.substr && data.substr(0, 256)
             });
 
-            let createStream = (id, rinfo) => {
-                let result = split2(/\n/, JSON.parse, {maxLength: this.config.maxLength});
+            const createStream = (id, rinfo) => {
+                const result = split2(/\n/, JSON.parse, {maxLength: this.config.maxLength});
                 this.cache.set(id, result);
                 result.on('data', msg => this.emit('logJSON', msg));
                 result.mapper = msg => {
@@ -263,8 +268,8 @@ module.exports = function({utPort}) {
             };
             this.socket = dgram.createSocket('udp4');
             this.socket.on('message', (msg, rinfo) => {
-                let id = msg.slice(0, 16).toString('hex');
-                let stream = this.cache.get(id) || createStream(id, rinfo);
+                const id = msg.slice(0, 16).toString('hex');
+                const stream = this.cache.get(id) || createStream(id, rinfo);
                 stream.write(msg.slice(16));
             });
             this.socket.on('close', () => {
@@ -288,12 +293,13 @@ module.exports = function({utPort}) {
                 self.log.info && self.log.info({
                     $meta: {
                         mtid: 'event',
-                        method: `port.started`
+                        method: 'port.started'
                     },
                     msg: 'go to: ' + self.httpServer.info.uri + ' to access the debug console'
                 });
             });
         }
+
         async stop() {
             // cleanup
             this.socket && this.socket.close();
