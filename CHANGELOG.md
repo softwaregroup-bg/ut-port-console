@@ -1,3 +1,12 @@
+## [9.1.3](https://github.com/softwaregroup-bg/ut-port-console/compare/v9.1.2...v9.1.3) (2020-11-13)
+
+
+### Bug Fixes
+
+* handle secure ([#22](https://github.com/softwaregroup-bg/ut-port-console/issues/22)) ([3d61c09](https://github.com/softwaregroup-bg/ut-port-console/commit/3d61c0975d87005ad397ec19d9bee632646d7697))
+
+
+
 ## [9.1.2](https://github.com/softwaregroup-bg/ut-port-console/compare/v9.1.1...v9.1.2) (2020-10-28)
 
 
