@@ -69,8 +69,7 @@ jQuery(document).ready(function() {
         if (typeof (config) !== 'undefined' && config && config.xsrfToken) {
             xsrfToken = config.xsrfToken;
         }
-
-        var ws = new window.WebSocket('ws://' + window.location.host + '/status?xsrf=' + xsrfToken);
+        var ws = new window.WebSocket(window.location.protocol.replace('http', 'ws') + '//' + window.location.host + '/status?xsrf=' + xsrfToken);
         ws.onopen = function(e) {
             console.log('connected');
             ws.send('test');
