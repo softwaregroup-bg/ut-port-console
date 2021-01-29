@@ -244,7 +244,7 @@ module.exports = function({utPort}) {
             });
 
             const createStream = (id, rinfo) => {
-                const result = split2(/\n/, JSON.parse, {maxLength: this.config.maxLength});
+                const result = split2(/(?<=})\t*\s*\r?\n+/, JSON.parse, {maxLength: this.config.maxLength});
                 this.cache.set(id, result);
                 result.on('data', msg => this.emit('logJSON', msg));
                 result.mapper = msg => {
