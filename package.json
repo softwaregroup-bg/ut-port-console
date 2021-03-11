@@ -11,7 +11,7 @@
     "@hapi/hapi": "20.0.1",
     "@hapi/inert": "6.0.3",
     "ut-wss": "^1.0.0",
-    "lru-cache": "4.1.1",
+    "lru-cache": "6.0.0",
     "jsonwebtoken": "8.5.0",
     "split2": "2.2.0"
   },
