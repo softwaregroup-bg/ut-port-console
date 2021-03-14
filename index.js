@@ -7,7 +7,7 @@ const Boom = require('@hapi/boom');
 const dgram = require('dgram');
 const split2 = require('split2');
 const _undefined = undefined;
-const cache = require('lru-cache');
+const LRUCache = require('lru-cache');
 
 module.exports = function({utPort}) {
     return class ConsolePort extends utPort {
@@ -225,7 +225,7 @@ module.exports = function({utPort}) {
                 }
             });
 
-            this.cache = cache(this.config.cache);
+            this.cache = new LRUCache(this.config.cache);
 
             const logError = (error, data) => this.emit('logJSON', {
                 error: {
