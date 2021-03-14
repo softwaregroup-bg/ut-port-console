@@ -1,6 +1,6 @@
 {
   "name": "ut-port-console",
-  "version": "9.1.4",
+  "version": "9.1.5",
   "pkg": {
     "assets": [
       "public/**/*"

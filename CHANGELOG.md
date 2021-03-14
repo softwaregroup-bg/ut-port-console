@@ -1,3 +1,12 @@
+## [9.1.5](https://github.com/softwaregroup-bg/ut-port-console/compare/v9.1.4...v9.1.5) (2021-03-14)
+
+
+### Bug Fixes
+
+* new LRUCache ([abd8673](https://github.com/softwaregroup-bg/ut-port-console/commit/abd867339e1a9979b40939a236caaa687b059bb2))
+
+
+
 ## [9.1.4](https://github.com/softwaregroup-bg/ut-port-console/compare/v9.1.3...v9.1.4) (2021-03-11)
 
 
