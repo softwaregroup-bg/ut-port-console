@@ -1,3 +1,12 @@
+## [9.1.7](https://github.com/softwaregroup-bg/ut-port-console/compare/v9.1.6...v9.1.7) (2022-06-29)
+
+
+### Bug Fixes
+
+* update hapi for node 16 ([2f339c6](https://github.com/softwaregroup-bg/ut-port-console/commit/2f339c6377dabc18ef0db4b8e51add2785bd5afa))
+
+
+
 ## [9.1.6](https://github.com/softwaregroup-bg/ut-port-console/compare/v9.1.5...v9.1.6) (2021-10-27)
 
 
