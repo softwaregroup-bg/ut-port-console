@@ -7,18 +7,17 @@
     ]
   },
   "dependencies": {
-    "@hapi/boom": "9.1.0",
-    "@hapi/hapi": "20.0.1",
-    "@hapi/inert": "6.0.3",
+    "@hapi/boom": "9.1.4",
+    "@hapi/hapi": "20.2.1",
+    "@hapi/inert": "6.0.5",
     "ut-wss": "^1.0.0",
-    "lru-cache": "6.0.0",
+    "lru-cache": "7.8.1",
     "jsonwebtoken": "8.5.0",
     "split2": "2.2.0"
   },
   "devDependencies": {
-    "tap": "^15.0.9",
-    "ut-tools": "^6.34.2",
-    "ut-run": "^10.57.4"
+    "tap": "^16.0.0",
+    "ut-run": "^10.69.8"
   },
   "description": "UT port console module",
   "scripts": {
