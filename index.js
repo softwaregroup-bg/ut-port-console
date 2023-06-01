@@ -60,9 +60,10 @@ module.exports = function({utPort}) {
                 },
                 cache: {
                     max: 100,
-                    maxAge: 60 * 1000
+                    ttl: 60 * 1000
                 },
-                maxLength: 16 * 1024
+                maxLength: 16 * 1024,
+                errorMessageLength: 256
             };
         }
 
@@ -126,7 +127,7 @@ module.exports = function({utPort}) {
         }
 
         async start() {
-            await super.start(...arguments);
+            const result = await super.start(...arguments);
             const self = this;
             this.httpServer = new Hapi.Server(this.config.server);
             await this.httpServer.register(Inert);
@@ -240,7 +241,7 @@ module.exports = function({utPort}) {
                     mtid: 'error',
                     method: 'split2.write'
                 },
-                msg: data && data.substr && data.substr(0, 256)
+                msg: data && data.substr && data.substr(0, this.config.errorMessageLength)
             });
 
             const createStream = (id, rinfo) => {
@@ -289,15 +290,19 @@ module.exports = function({utPort}) {
             this.utWss.registerPath('/status');
             this.utWss.start(this.httpServer.listener);
 
-            this.httpServer.start(function() {
-                self.log.info && self.log.info({
-                    $meta: {
-                        mtid: 'event',
-                        method: 'port.started'
-                    },
-                    msg: 'go to: ' + self.httpServer.info.uri + ' to access the debug console'
-                });
+            await this.httpServer.start();
+
+            this.log?.info?.({
+                $meta: {
+                    mtid: 'event',
+                    method: 'port.started'
+                },
+                msg: 'go to: ' + this.httpServer.info.uri + ' to access the debug console'
             });
+
+            this.resolveConnected(true);
+
+            return result;
         }
 
         async stop() {
