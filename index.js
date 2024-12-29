@@ -122,26 +122,26 @@ module.exports = function({parent}) {
             method: 'GET',
             path: '/js/config.js',
             config: {auth: false},
-            handler: (req, reply) => {
+            handler: (req, h) => {
                 var config = {
                     ssoAuthUrl: this.config.ssoAuthUrl,
                     xsrfToken: (req.state && req.state['xsrf-token'])
                 };
-                reply(`var config = ${JSON.stringify(config)}`);
+                h.response(`var config = ${JSON.stringify(config)}`);
             }
         });
         this.httpServer.route({
             method: 'POST',
             path: '/sso/client',
             config: {auth: false},
-            handler: (req, reply) => {
+            handler: (req, h) => {
                 var cookieConf = Object.assign({}, this.config.cookie, {path: '/'});
                 if (req.payload && req.payload.cookie && req.payload.cookie.name && req.payload.cookie.value) {
                     jwt.verify(req.payload.cookie.value, this.config.jwt.key, Object.assign({}, this.config.jwt.verifyOptions, {ignoreExpiration: false}), (err, decoded) => {
                         if (err) {
-                            reply(Boom.unauthorized());
+                            h.response(Boom.unauthorized());
                         } else {
-                            reply('OK')
+                            h.response('OK')
                             .state(
                                 req.payload.cookie.name,
                                 req.payload.cookie.value,
@@ -155,7 +155,7 @@ module.exports = function({parent}) {
                         }
                     });
                 } else {
-                    reply(Boom.unauthorized());
+                    h.response(Boom.unauthorized());
                 }
             }
         });
@@ -168,11 +168,11 @@ module.exports = function({parent}) {
                     output: 'stream',
                     parse: true
                 },
-                handler: function(request, reply) {
+                handler: function(request, h) {
                     request.payload.files.pipe(split2(JSON.parse)).on('data', function(log) {
                         self.emit('logJSON', log);
                     });
-                    return reply('');
+                    return h.response('');
                 }
             }
         });
@@ -180,9 +180,9 @@ module.exports = function({parent}) {
         this.httpServer.route({
             method: 'POST',
             path: '/query-logs',
-            handler: function(request, reply) {
+            handler: function(request, h) {
                 self.readFromDB(request.payload);
-                return reply('');
+                return h.response('');
             }
         });
 
